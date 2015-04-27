@@ -7,28 +7,16 @@ package mafia;
  */
 public class Player {
  
-    private final int identifier;  // Unique Identifier
     private final String name;     // Player Name
     private boolean alive = true;  // Alive status
     
     /**
      * Player()
      * Constructor for the Player class
-     * @param id Unique Identifier
      * @param name Player's Name
      */
-    public Player(int id, String name) {
-        this.identifier = id;
+    public Player(String name) {
         this.name = name;
-    }
-    
-    /**
-     * getId()
-     * Gets the unique ID for this player
-     * @return Player ID
-     */
-    public int getId() {
-        return this.identifier;
     }
     
     /**
