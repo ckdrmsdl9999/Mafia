@@ -1,39 +1,46 @@
 package mafiaserver;
 
 import java.util.Vector;
-import mafia.Player;
 
 /**
  * MafiaServer.java
- * Contains the Mafia Server entry point
+ * Contains the MafiaServer class
  * @author Cory Gehr (cmg5573)
  */
 public class MafiaServer extends Thread {
     
-    public Vector<ServerPlayer> players; // List of players
-    public final int port;         // Port Number the server listens on
+    public Vector<Participant> clients; // Client list
+    public final int port;              // Port Number
     
     /**
      * MafiaServer()
      * Constructor for the MafiaServer class
-     * @param port Port Number to listen on
+     * @param port Port Number
      */
     public MafiaServer(int port) {
-        // Initialize player list
-        this.players = new Vector();
-        // Initialize port number
+        this.clients = new Vector();
         this.port = port;
     }
     
     /**
      * main()
-     * Entry point for the Mafia Game Server
+     * Entry Point for the MafiaServer application
      * @param args Command Line arguments
      */
     public static void main(String[] args) {
-        // Start the main server thread
-        MafiaServer serverThread = new MafiaServer(Integer.parseInt(args[0]));
-        serverThread.start();
+        // Create server thread (arg 0 is port number)
+        MafiaServer server = new MafiaServer(Integer.parseInt(args[0]));
+        server.start();
+    }
+    
+    /**
+     * getClientList()
+     * Returns a string with all client usernames
+     * @return String with Client usernames
+     */
+    public String getClientList() {
+        String list = "";
+        return this.clients.stream().map((user) -> user.getUsername() + "\n").reduce(list, String::concat);
     }
     
     /**
@@ -42,8 +49,16 @@ public class MafiaServer extends Thread {
      */
     @Override
     public void run() {
-        // Start client listener
-        ServerClientListener clientListener = new ServerClientListener(this);
-        clientListener.start();
+        // Start remote connection threads
+        ServerConnectionListener listener = new ServerConnectionListener(this);
+        listener.start();
+        
+        // Add current server to the list of clients
+        ServerParticipant serverClient = new ServerParticipant("(SERVER)");
+        this.clients.add(serverClient);
+        // Create a client listener
+        ServerClientConnector clientConnector = 
+                new ServerClientConnector(serverClient, this);
+        clientConnector.start();
     }
 }

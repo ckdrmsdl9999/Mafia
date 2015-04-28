@@ -6,23 +6,23 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * ServerPlayer.java
- * Contains the ServerPlayer class
+ * RemoteParticipant.java
+ * Contains the RemoteParticipant class
  * @author Cory Gehr (cmg5573)
  */
-public class ServerPlayer extends mafia.Player {
+public class RemoteParticipant extends Participant{
     
-    private DataInputStream inputStream = null;   // Input provider
-    private DataOutputStream outputStream = null; // Output provider
+    private DataInputStream inputStream = null;   // Data Input Stream
+    private DataOutputStream outputStream = null; // Data Output Stream
     
     /**
-     * ServerPlayer()
-     * Constructor for the ServerPlayer class
-     * @param name User Name
+     * RemoteParticipant()
+     * Constructor for the RemoteParticipant class
+     * @param username Participant Username
+     * @param connection Client Socket
      */
-    public ServerPlayer(String name, Socket connection) {
-        super(name);
-        
+    public RemoteParticipant(String username, Socket connection) {
+        this.username = username;
         try {
             this.inputStream = new DataInputStream(connection.getInputStream());
             this.outputStream = new DataOutputStream(connection.getOutputStream());
@@ -37,6 +37,7 @@ public class ServerPlayer extends mafia.Player {
      * Gets a string input from the client
      * @return Client Input
      */
+    @Override
     public String getInput() {
         try {
             return this.inputStream.readUTF();
@@ -52,6 +53,7 @@ public class ServerPlayer extends mafia.Player {
      * Pushes data to the client
      * @param input Message to send
      */
+    @Override
     public void pushOutput(String input) {
         try {
             // Write to the client

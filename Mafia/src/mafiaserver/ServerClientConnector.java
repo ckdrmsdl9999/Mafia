@@ -1,25 +1,23 @@
 package mafiaserver;
 
-import java.io.IOException;
-
 /**
  * ServerClientConnector.java
- * Contains the ServerClientConnector class
+ * Contains the server client connector class
  * @author Cory Gehr (cmg5573)
  */
 public class ServerClientConnector extends Thread {
     
-    private final ServerPlayer player;      // Player object
     private final MafiaServer serverObject; // MafiaServer object
+    private final Participant client;    // The client we're connected to
     
     /**
      * ServerClientConnector()
      * Constructor for the ServerClientConnector class
-     * @param player ServerPlayer object for the user
-     * @param serverObject MafiaServer game object
+     * @param client Participant object
+     * @param serverObject IMServer Object
      */
-    public ServerClientConnector(ServerPlayer player, MafiaServer serverObject) {
-        this.player = player;
+    public ServerClientConnector(Participant client, MafiaServer serverObject) {
+        this.client = client;
         this.serverObject = serverObject;
     }
     
@@ -29,30 +27,24 @@ public class ServerClientConnector extends Thread {
      */
     @Override
     public void run() {
-        // Wait for input from the user indefinitely
         while(true) {
-            String input = this.player.getInput();
-            
-            // Parse input and do action based on that
-            this.parseInput(input);
-        }
-    }
-    
-    /**
-     * parseInput()
-     * Determines a user's command
-     * @param input Input String
-     */
-    public void parseInput(String input) {
-        // Do something (ex. determine a vote, chat, etc.)
-        switch(input) {
-            default:
-                // Base case is to chat
+            // Wait for a message from the participant
+            String inFromClient = client.getInput();
+            String separator = "---------------";
+
+            if(inFromClient.equals("SHOW USERS")) {
+                client.pushOutput(separator);
+                client.pushOutput("CURRENTLY CONNECTED USERS:");
+                client.pushOutput(separator);
+                client.pushOutput(this.serverObject.getClientList());
+            }
+            else {
+                // Broadcast message
                 ServerMessageBroadcaster broadcast = 
-                        new ServerMessageBroadcaster(this.player, 
-                                this.serverObject.players, input);
+                        new ServerMessageBroadcaster(this.client, 
+                                this.serverObject.clients, inFromClient);
                 broadcast.start();
-            break;
+            }
         }
     }
 }
