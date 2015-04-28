@@ -51,7 +51,7 @@ public class ServerClientConnector extends Thread {
         else if(input.startsWith("PLAYER")) {
             // Check status of player
         }
-        else if(input.startsWith("STATUS")) {
+        else if(input.equals("STATUS")) {
             // Get game status
         }
         else if(input.startsWith("VOTE")) {

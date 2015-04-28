@@ -22,6 +22,39 @@ public class ServerParticipant extends Participant{
     }
     
     /**
+     * canSeeChat()
+     * Tells if the user can receive chat messages
+     * @return True if Yes, False if No
+     */
+    @Override
+    public boolean canSeeChat() {
+        // Server can always see chats
+        return true;
+    }
+    
+    /**
+     * canTalk()
+     * Tells if the user can send messages
+     * @return True if Yes, False if No
+     */
+    @Override
+    public boolean canTalk() {
+        // Server can always talk
+        return true;
+    }
+    
+    /**
+     * canVote()
+     * Tells if the user can vote
+     * @return True if Yes, False if No
+     */
+    @Override
+    public boolean canVote() {
+        // Server can never vote
+        return false;
+    }
+    
+    /**
      * getInput()
      * Gets a string input from the client
      * @return Client Input

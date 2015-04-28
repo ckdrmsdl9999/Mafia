@@ -10,6 +10,9 @@ import java.net.Socket;
 abstract class Participant {
     
     protected String username = "(UNKNOWN)";   // Username
+    private boolean canTalk = true;               // Tells if user can chat
+    private boolean canVote = false;              // Tells if user can vote
+    private boolean canSeeChat = true;            // Tells if user can see chats
     
     /**
      * getUsername()
@@ -18,6 +21,33 @@ abstract class Participant {
      */
     public String getUsername() {
         return this.username;
+    }
+   
+    /**
+     * canSeeChat()
+     * Tells if the user can receive chat messages
+     * @returns True if Yes, False if No
+     */
+    public boolean canSeeChat() {
+        return this.canSeeChat;
+    }
+    
+    /**
+     * canTalk()
+     * Tells if the user can send messages
+     * @returns True if Yes, False if No
+     */
+    public boolean canTalk() {
+        return this.canTalk;
+    }
+    
+    /**
+     * canVote()
+     * Tells if the user can vote
+     * @returns True if Yes, False if No
+     */
+    public boolean canVote() {
+        return this.canVote;
     }
     
     /**
