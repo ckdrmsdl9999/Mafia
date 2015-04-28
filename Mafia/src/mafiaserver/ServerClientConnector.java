@@ -56,14 +56,24 @@ public class ServerClientConnector extends Thread {
         }
         else if(input.startsWith("VOTE")) {
             // If player can vote
-            // Run vote action
+            if(client.canVote()) {
+                // Run vote action
+            }
+            else {
+                client.pushOutput("You are not currently allowed to vote.");
+            }
         }
         else {
-            // Broadcast message
-            ServerMessageBroadcaster broadcast = 
-                    new ServerMessageBroadcaster(this.client, 
-                            this.serverObject.clients, input);
-            broadcast.start();
+            // Broadcast message if user is allowed to chat
+            if(client.canTalk()) {
+                ServerMessageBroadcaster broadcast = 
+                        new ServerMessageBroadcaster(this.client, 
+                                this.serverObject.clients, input);
+                broadcast.start();
+            }
+            else {
+                client.pushOutput("You are not currently allowed to chat.");
+            }
         }
     }
 }
