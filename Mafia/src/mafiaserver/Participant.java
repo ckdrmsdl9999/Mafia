@@ -52,6 +52,50 @@ abstract class Participant {
     }
     
     /**
+     * changeSeeChatStatus()
+     * Changes the user's ability to receive chats
+     * @param status True if they can see chats, False if not
+     */
+    public void changeSeeChatStatus(boolean status) {
+        this.canSeeChat = status;
+    }
+    
+    /**
+     * changeTalkStatus()
+     * Changes the user's ability to talk
+     * @param status True if they can talk, False if not
+     */
+    public void changeTalkStatus(boolean status) {
+        this.canTalk = status;
+    }
+    
+    /**
+     * changeVoteStatus()
+     * Changes the user's ability to vote
+     * @param status True if they can vote, False if not
+     */
+    public void changeVoteStatus(boolean status) {
+        this.canVote = status;
+    }
+    
+    /**
+     * deactivate()
+     * Deactivates the user
+     */
+    public void deactivate() {
+        this.isAlive = false;
+    }
+    
+    /**
+     * isAlive()
+     * Tells if the user is alive
+     * @returns True if Yes, False if No
+     */
+    public boolean isAlive() {
+        return this.isAlive;
+    }
+    
+    /**
      * getInput()
      * Gets data from the client
      * @return Input from Client
