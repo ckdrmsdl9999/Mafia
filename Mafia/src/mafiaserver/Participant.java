@@ -10,9 +10,10 @@ import java.net.Socket;
 abstract class Participant {
     
     protected String username = "(UNKNOWN)";   // Username
-    private boolean canTalk = true;               // Tells if user can chat
-    private boolean canVote = false;              // Tells if user can vote
-    private boolean canSeeChat = true;            // Tells if user can see chats
+    private boolean canTalk = true;            // Tells if user can chat
+    private boolean canVote = false;           // Tells if user can vote
+    private boolean canSeeChat = true;         // Tells if user can see chats
+    private boolean isAlive = true;            // Tells if user is alive/active
     
     /**
      * getUsername()
@@ -29,7 +30,7 @@ abstract class Participant {
      * @returns True if Yes, False if No
      */
     public boolean canSeeChat() {
-        return this.canSeeChat;
+        return this.canSeeChat || !this.isAlive;
     }
     
     /**
@@ -38,7 +39,7 @@ abstract class Participant {
      * @returns True if Yes, False if No
      */
     public boolean canTalk() {
-        return this.canTalk;
+        return this.canTalk && this.isAlive;
     }
     
     /**
@@ -47,7 +48,7 @@ abstract class Participant {
      * @returns True if Yes, False if No
      */
     public boolean canVote() {
-        return this.canVote;
+        return this.canVote && this.isAlive;
     }
     
     /**

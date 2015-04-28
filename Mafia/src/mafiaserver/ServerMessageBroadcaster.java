@@ -33,8 +33,7 @@ public class ServerMessageBroadcaster extends Thread {
     @Override
     public void run() {
         // Loop through all clients (that are not the current user)
-        this.clients.stream().filter((user) -> (!user.getUsername().equals(this.source.getUsername()))).forEach((user) -> {
-            // Output data to user
+        this.clients.stream().filter((user) -> (!user.getUsername().equals(this.source.getUsername()) && user.canSeeChat())).forEach((user) -> {
             user.pushOutput(this.message);
         });
     }

@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class ServerParticipant extends Participant{
     
     private final Scanner input; // Input scanner
+    private boolean isAlive = false;
     
     /**
      * ServerParticipant()
@@ -19,39 +20,6 @@ public class ServerParticipant extends Participant{
     public ServerParticipant(String username) {
         this.username = username;
         this.input = new Scanner(System.in);
-    }
-    
-    /**
-     * canSeeChat()
-     * Tells if the user can receive chat messages
-     * @return True if Yes, False if No
-     */
-    @Override
-    public boolean canSeeChat() {
-        // Server can always see chats
-        return true;
-    }
-    
-    /**
-     * canTalk()
-     * Tells if the user can send messages
-     * @return True if Yes, False if No
-     */
-    @Override
-    public boolean canTalk() {
-        // Server can always talk
-        return true;
-    }
-    
-    /**
-     * canVote()
-     * Tells if the user can vote
-     * @return True if Yes, False if No
-     */
-    @Override
-    public boolean canVote() {
-        // Server can never vote
-        return false;
     }
     
     /**
