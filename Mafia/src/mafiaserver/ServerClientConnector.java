@@ -29,22 +29,34 @@ public class ServerClientConnector extends Thread {
     public void run() {
         while(true) {
             // Wait for a message from the participant
-            String inFromClient = client.getInput();
-            String separator = "---------------";
-
-            if(inFromClient.equals("SHOW USERS")) {
+            this.parseInput(client.getInput());
+        }
+    }
+    
+    /**
+     * parseInput()
+     * Determines an action to perform based on user input
+     * @param input User Input
+     */
+    public void parseInput(String input) {
+        // Separator string
+        String separator = "---------------";
+        // input Cases
+        switch(input) {
+            case "SHOW USERS":
                 client.pushOutput(separator);
                 client.pushOutput("CURRENTLY CONNECTED USERS:");
                 client.pushOutput(separator);
                 client.pushOutput(this.serverObject.getClientList());
-            }
-            else {
+            break;
+            
+            default:
                 // Broadcast message
                 ServerMessageBroadcaster broadcast = 
                         new ServerMessageBroadcaster(this.client, 
-                                this.serverObject.clients, inFromClient);
+                                this.serverObject.clients, input);
                 broadcast.start();
-            }
+            break;
         }
     }
 }
