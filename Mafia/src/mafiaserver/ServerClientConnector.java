@@ -42,21 +42,28 @@ public class ServerClientConnector extends Thread {
         // Separator string
         String separator = "---------------";
         // input Cases
-        switch(input) {
-            case "SHOW USERS":
-                client.pushOutput(separator);
-                client.pushOutput("CURRENTLY CONNECTED USERS:");
-                client.pushOutput(separator);
-                client.pushOutput(this.serverObject.getClientList());
-            break;
-            
-            default:
-                // Broadcast message
-                ServerMessageBroadcaster broadcast = 
-                        new ServerMessageBroadcaster(this.client, 
-                                this.serverObject.clients, input);
-                broadcast.start();
-            break;
+        if(input.equals("SHOW USERS")) {
+            client.pushOutput(separator);
+            client.pushOutput("CURRENTLY CONNECTED USERS:");
+            client.pushOutput(separator);
+            client.pushOutput(this.serverObject.getClientList());
+        }
+        else if(input.startsWith("PLAYER")) {
+            // Check status of player
+        }
+        else if(input.startsWith("STATUS")) {
+            // Get game status
+        }
+        else if(input.startsWith("VOTE")) {
+            // If player can vote
+            // Run vote action
+        }
+        else {
+            // Broadcast message
+            ServerMessageBroadcaster broadcast = 
+                    new ServerMessageBroadcaster(this.client, 
+                            this.serverObject.clients, input);
+            broadcast.start();
         }
     }
 }
