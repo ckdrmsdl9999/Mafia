@@ -56,9 +56,14 @@ public class MafiaServer extends Thread {
         // Add current server to the list of clients
         ServerParticipant serverClient = new ServerParticipant("(SERVER)");
         this.clients.add(serverClient);
+        
         // Create a client listener
         ServerClientConnector clientConnector = 
                 new ServerClientConnector(serverClient, this);
         clientConnector.start();
+        
+        // Create turn sequencer
+        ServerTurnSequencer turnSequencer = new ServerTurnSequencer();
+        turnSequencer.start();
     }
 }
