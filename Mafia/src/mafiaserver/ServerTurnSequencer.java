@@ -23,6 +23,9 @@ public class ServerTurnSequencer extends Thread {
 
     @Override
     public synchronized void run() {
+        
+        double minutesPerTurn = 1;
+        long msPerTurn = (long) (minutesPerTurn * 60000);
 
         while (!turnController.isGameOver()) {
             // schedule a new turn every 5 minutes
@@ -32,7 +35,7 @@ public class ServerTurnSequencer extends Thread {
                 this.turnController.nightSequence();
             }
             try {
-                Thread.sleep(3000);
+                Thread.sleep(msPerTurn);
             } catch (InterruptedException ex) {
             }
         }

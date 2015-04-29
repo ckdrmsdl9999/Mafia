@@ -1,12 +1,10 @@
 package mafiaserver;
 
-import java.util.TimerTask;
-
 /**
  *
  * @author Ryan Snell <ryansnell@me.com>
  */
-public class ServerTurnController extends Thread {
+public class ServerTurnController {
 
     ServerTurnSequencer turnSequencer;
 
@@ -17,10 +15,6 @@ public class ServerTurnController extends Thread {
 
     public ServerTurnController(ServerTurnSequencer sts) {
         this.turnSequencer = sts;
-    }
-
-    @Override
-    public void run() {
     }
 
     /**
@@ -39,12 +33,13 @@ public class ServerTurnController extends Thread {
      */
     public void nightSequence() {
         
-        /** In order to go to the next time of day, call turnController.interrupt(); **/
+        /** In order to go to the next time of day, call turnSequencer.interrupt(); **/
 
         System.out.println("Night time");
 
         if (this.nightCount == 0) {
             // first night
+            
         } else {
             // regular night
 
