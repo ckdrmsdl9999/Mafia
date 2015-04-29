@@ -10,7 +10,8 @@ import java.util.Vector;
 public class MafiaServer extends Thread {
     
     public Vector<Participant> clients; // Client list
-    public final int port;              // Port Number
+    public static final int PORT_NUMBER = 65004;// Port Number
+    public int port;
     
     /**
      * MafiaServer()
@@ -29,7 +30,7 @@ public class MafiaServer extends Thread {
      */
     public static void main(String[] args) {
         // Create server thread (arg 0 is port number)
-        MafiaServer server = new MafiaServer(Integer.parseInt(args[0]));
+        MafiaServer server = new MafiaServer(PORT_NUMBER);
         server.start();
     }
     

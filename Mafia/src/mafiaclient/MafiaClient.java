@@ -7,6 +7,9 @@ package mafiaclient;
  */
 public class MafiaClient {
     
+    public static String HOST_NAME = "localhost";
+    public static int PORT_NUMBER = 65004;
+    
     /**
      * main()
      * Entry point for the MafiaClient application
@@ -15,8 +18,7 @@ public class MafiaClient {
     public static void main(String[] args) {
         // Start client connection
         ClientServerConnectionStarter connection = 
-                new ClientServerConnectionStarter(args[0], 
-                        Integer.parseInt(args[1]));
+                new ClientServerConnectionStarter(HOST_NAME, PORT_NUMBER);
         connection.start();
     }
 }
