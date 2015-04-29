@@ -57,10 +57,8 @@ public class ServerTurnSequencer extends Thread {
     @Override
     public synchronized void run() {
         while (!gameOver) {
-            while (true) {
-                // schedule a new turn every 5 minutes
-                timer.schedule(new ServerTimerTask(this), 0, 5 * 60 * 1000);
-            }
+            // schedule a new turn every 5 minutes
+            timer.schedule(new ServerTimerTask(this), 0, 5 * 60 * 1000);
         }
     }
 
@@ -79,9 +77,10 @@ public class ServerTurnSequencer extends Thread {
     public boolean isGameOver() {
         return this.gameOver;
     }
-    
+
     /**
      * isDayTime()
+     *
      * @return isDayTime
      */
     public boolean isDayTime() {
