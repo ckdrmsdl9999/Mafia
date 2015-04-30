@@ -34,4 +34,33 @@ public class VoteSequence extends Thread {
             client.pushOutput("You cannot vote on this.");
         }
     }
+    
+    /**
+     * getResult()
+     * Gets the result of the vote
+     * @return Vote Result, or NULL if there is a tie
+     */
+    public String getResult() {
+        HashMap<String, Integer> results = new HashMap();
+        
+        String winner = null;
+        int winningVoteNums = 0;
+        
+        // First, tally the votes
+        for(String vote : this.votes.values()) {
+            if(results.containsKey(vote)) {
+                results.put(vote, results.get(vote)+1);
+            }
+            else {
+                results.put(vote, 1);
+            }
+            
+            if(results.get(vote) > winningVoteNums) {
+                winningVoteNums = results.get(vote);
+                winner = vote;
+            }
+        }
+        
+        return winner;
+    }
 }
