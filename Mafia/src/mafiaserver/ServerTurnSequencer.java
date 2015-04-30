@@ -1,8 +1,6 @@
 package mafiaserver;
 
-import java.util.Timer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Vector;
 
 /**
  * ServerTurnSequencer.java Contains the ServerTurnSequencer class
@@ -12,13 +10,15 @@ import java.util.logging.Logger;
 public class ServerTurnSequencer extends Thread {
     
     ServerTurnController turnController;
+    MafiaServer server;
 
     /**
      * ServerTurnSequencer() Constructor for ServerTurnSequencer
-     * @param stc
+     * @param ms
      */
-    public ServerTurnSequencer() {
+    public ServerTurnSequencer(MafiaServer ms) {
         this.turnController = new ServerTurnController(this);
+        this.server = ms;
     }
 
     @Override
@@ -40,6 +40,15 @@ public class ServerTurnSequencer extends Thread {
             }
         }
         
+    }
+    
+    /**
+     * getClients()
+     * Get all clients
+     * @return Vector of all clients
+     */
+    public Vector<Participant> getClients() {
+        return server.getClients();
     }
 
 }

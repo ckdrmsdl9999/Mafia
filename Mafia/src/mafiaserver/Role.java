@@ -11,6 +11,7 @@ abstract public class Role {
     
     private String name; // Role name
     public ArrayList<RemoteParticipant> targets; // Targets arraylist
+    public boolean isMafia = false;
     
     /**
      * doAction()
@@ -25,6 +26,15 @@ abstract public class Role {
      */
     public String getName() {
         return this.name;
+    }
+    
+    /**
+     * isMafia()
+     * Tells if the user is a member of the Mafia
+     * @returns True if Yes, False if No
+     */
+    public boolean isMafia() {
+        return this.isMafia;
     }
     
     /**

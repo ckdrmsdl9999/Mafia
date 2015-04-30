@@ -9,6 +9,10 @@ public class Mafia extends Role {
     
     private final String name = "Mafia";
     
+    public Mafia() {
+        this.isMafia = true;
+    }
+    
     /**
      * doAction()
      * Kills the target

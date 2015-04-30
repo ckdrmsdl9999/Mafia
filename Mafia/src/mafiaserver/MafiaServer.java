@@ -46,6 +46,15 @@ public class MafiaServer extends Thread {
     }
     
     /**
+     * getClients()
+     * Returns a vector of all clients
+     * @return Vector of all clients
+     */
+    public Vector<Participant> getClients() {
+        return this.clients;
+    }
+    
+    /**
      * run()
      * Main thread execution procedures
      */
@@ -65,7 +74,7 @@ public class MafiaServer extends Thread {
         clientConnector.start();
         
         // Create turn sequencer
-        this.turnSequencer = new ServerTurnSequencer();
+        this.turnSequencer = new ServerTurnSequencer(this);
         this.turnSequencer.start();
     }
 }
