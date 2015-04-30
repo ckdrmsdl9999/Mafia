@@ -9,8 +9,9 @@ import java.util.Vector;
  */
 public class MafiaServer extends Thread {
     
-    public Vector<Participant> clients; // Client list
-    public static final int PORT_NUMBER = 65004;// Port Number
+    public Vector<Participant> clients;          // Client list
+    public static final int PORT_NUMBER = 65004; // Port Number
+    public ServerTurnSequencer turnSequencer;    // Turn sequencer
     public int port;
     
     /**
@@ -64,7 +65,7 @@ public class MafiaServer extends Thread {
         clientConnector.start();
         
         // Create turn sequencer
-        ServerTurnSequencer turnSequencer = new ServerTurnSequencer();
-        turnSequencer.start();
+        this.turnSequencer = new ServerTurnSequencer();
+        this.turnSequencer.start();
     }
 }
