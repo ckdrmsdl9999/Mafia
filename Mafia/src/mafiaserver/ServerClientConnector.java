@@ -61,6 +61,7 @@ public class ServerClientConnector extends Thread {
                     + "NOMINATE {player} = (Day) Nominate a player to be lynched\n"
                     + "PLAYER {player} = View the status of a player\n"
                     + "PROTECT {player} = (Night - Medic Only) Protect a player from possible murder\n"
+                    + "SHOW USERS = Displays a list of all player usernames\n"
                     + "STATUS = Display game status\n"
                     + "VOTE {player} = (Day) Vote a player for lynching";
             client.pushOutput(helpText);
@@ -121,7 +122,7 @@ public class ServerClientConnector extends Thread {
                 client.pushOutput("You cannot currently do that.");
             }
         }
-        else if(input.equals("SHOW USERS")) { // Show current user list
+        else if(input.startsWith("SHOW USERS")) { // Show current user list
             client.pushOutput(separator);
             client.pushOutput("CURRENTLY CONNECTED USERS:");
             client.pushOutput(separator);
