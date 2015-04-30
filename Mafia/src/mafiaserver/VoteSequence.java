@@ -44,21 +44,36 @@ public class VoteSequence extends Thread {
         HashMap<String, Integer> results = new HashMap();
         
         String winner = null;
-        int winningVoteNums = 0;
+        int winnerVotes = 0;
+        boolean hasTie = false;
         
         // First, tally the votes
         for(String vote : this.votes.values()) {
+            // Get vote count for this entry
+            int currentVotes = results.get(vote);
+            
             if(results.containsKey(vote)) {
-                results.put(vote, results.get(vote)+1);
+                results.put(vote, currentVotes+1);
             }
             else {
                 results.put(vote, 1);
             }
             
-            if(results.get(vote) > winningVoteNums) {
-                winningVoteNums = results.get(vote);
+            if(currentVotes+1 > winnerVotes) {
+                // This option has a better value than the others
+                winnerVotes = currentVotes+1;
                 winner = vote;
+                hasTie = false;
             }
+            else if(currentVotes == winnerVotes) {
+                // A tie exists
+                hasTie = true;
+            }
+        }
+        
+        // Return null if we have a tie
+        if(hasTie) {
+            return null;
         }
         
         return winner;
