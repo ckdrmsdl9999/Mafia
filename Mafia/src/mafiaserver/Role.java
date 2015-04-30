@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 abstract public class Role {
     
-    private String name; // Role name
+    String name; // Role name
     public ArrayList<RemoteParticipant> targets; // Targets arraylist
     public boolean isMafia = false;
     
@@ -31,7 +31,7 @@ abstract public class Role {
     /**
      * isMafia()
      * Tells if the user is a member of the Mafia
-     * @returns True if Yes, False if No
+     * @return True if Yes, False if No
      */
     public boolean isMafia() {
         return this.isMafia;

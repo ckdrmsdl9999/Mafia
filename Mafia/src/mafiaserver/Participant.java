@@ -14,6 +14,7 @@ abstract class Participant {
     private boolean canVote = false;           // Tells if user can vote
     private boolean canSeeChat = true;         // Tells if user can see chats
     private boolean isAlive = true;            // Tells if user is alive/active
+    private Role role = null;
     
     /**
      * getUsername()
@@ -22,6 +23,33 @@ abstract class Participant {
      */
     public String getUsername() {
         return this.username;
+    }
+    
+    /**
+     * getRole()
+     * Gets the participant's role
+     * @return Role
+     */
+    public Role getRole() {
+        return this.role;
+    }
+    
+    /**
+     * setRole()
+     * Sets the participant's role
+     * @return Role
+     */
+    public void setRole(Role r) {
+        this.role = r;
+    }
+    
+    /**
+     * hasRole()
+     * Tells if the user has an assigned role
+     * @returns True if Yes, False if No
+     */
+    public boolean hasRole() {
+        return (this.role != null);
     }
    
     /**
