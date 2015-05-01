@@ -42,6 +42,7 @@ public class ServerTurnSequencer extends Thread {
         long msPerTurn = (long) (minutesPerTurn * 60000);
 
         while (!turnController.isGameOver()) {
+            
             // empty votes
             sheriffVotes.clear();
             mafiaVotes.clear();
@@ -58,6 +59,9 @@ public class ServerTurnSequencer extends Thread {
             } catch (InterruptedException ex) {
                 System.err.println(ex.getMessage());
             }
+            
+            // processing of votes should go here
+            
         }
         
     }
