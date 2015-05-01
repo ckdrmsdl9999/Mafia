@@ -22,7 +22,7 @@ public class ServerTurnController {
      */
     public void daySequence() {
 
-        System.out.println("(NARRATOR) The sun has risen.\n");
+        this.promptDaytime();
         
         this.promptTownspeople();
 
@@ -37,7 +37,7 @@ public class ServerTurnController {
         
         /** In order to go to the next time of day, call turnSequencer.interrupt(); **/
 
-        System.out.println("(NARRATOR) Night has fallen upon us.\n");
+        this.promptNighttime();
 
         if (this.nightCount == 0) {
             // first night
@@ -100,7 +100,7 @@ public class ServerTurnController {
     public void promptMafia() {
         String prompt = "(NARRATOR) Mafia, it is your turn to nominate a person "
                 + "to be killed.\nTo vote for a person, type and enter"
-                + "`MURDER username`.\n";
+                + " `MURDER username`.\n";
         for(Participant p : this.turnSequencer.getClients())
         {
             if(p.getRole().isMafia())
@@ -117,7 +117,7 @@ public class ServerTurnController {
     public void promptSheriff() {
         String prompt = "(NARRATOR) Sheriff, it is your turn to accuse a person "
                 + "of being the mafia.\nTo accuse a person, type and enter"
-                + "`ACCUSE username`.\n";
+                + " `ACCUSE username`.\n";
         for(Participant p : this.turnSequencer.getClients())
         {
             if(p.getRole().getName().equals("Sheriff"))
@@ -134,10 +134,36 @@ public class ServerTurnController {
     public void promptTownspeople() {
         String prompt = "(NARRATOR) Townspeople, it is your turn to accuse someone "
                 + "of being part of the mafia.\nTo accuse a person, type and enter"
-                + "`VOTE username`.\n";
+                + " `VOTE username`.\n";
+        this.blastPrompt(prompt);
+    }
+    
+    /**
+     * promptNighttime()
+     * Prompt the townspeople that it is night time
+     */
+    public void promptNighttime() {
+        String prompt = "(NARRATOR) Night has fallen upon us.\n";
+        this.blastPrompt(prompt);
+    }
+    
+    /**
+     * promptDaytime()
+     * Prompt the townspeople that it is day time
+     */
+    public void promptDaytime() {
+        String prompt = "(NARRATOR) The sun has risen.\n";
+        this.blastPrompt(prompt);
+    }
+    
+    /**
+     * blastPrompt()
+     * Send a prompt to all connected clients
+     */
+    public void blastPrompt(String s) {
         for(Participant p : this.turnSequencer.getClients())
         {
-            p.pushOutput(prompt);
+            p.pushOutput(s);
         }
     }
     
