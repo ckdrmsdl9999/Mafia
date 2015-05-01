@@ -80,7 +80,7 @@ public class MafiaServer extends Thread {
         listener.start();
 
         // Add current server to the list of clients
-        ServerParticipant serverClient = new ServerParticipant("(SERVER)");
+        ServerParticipant serverClient = new ServerParticipant("(NARRATOR)");
         this.clients.add(serverClient);
 
         // Create a client listener

@@ -17,11 +17,6 @@ public class ServerTurnController {
 
     public ServerTurnController(ServerTurnSequencer sts) {
         this.turnSequencer = sts;
-        // inform everyone of their roles
-        for(Participant p : this.turnSequencer.getClients())
-        {
-            p.notifyOfRole();
-        }
     }
 
     /**
@@ -29,7 +24,7 @@ public class ServerTurnController {
      */
     public void daySequence() {
 
-        System.out.println("Day time");
+        System.out.println("(NARRATOR) The sun has risen.\n");
 
         this.isDayTime = false;
         this.dayCount++;
@@ -42,7 +37,7 @@ public class ServerTurnController {
         
         /** In order to go to the next time of day, call turnSequencer.interrupt(); **/
 
-        System.out.println("Night time");
+        System.out.println("(NARRATOR) Night has fallen upon us.\n");
 
         if (this.nightCount == 0) {
             // first night
@@ -65,15 +60,8 @@ public class ServerTurnController {
             
         } else {
             // regular night
-
-            /*  Now that everyone has their identities it's time for the mafia 
-             to meet each other. Everyone must close their eyes. Then tell 
-             the mafia to open their eyes and reveal themselves to each 
-             other. The two mafia players (the people with the queens, 
-             remember?) will open their eyes and look around to see who the 
-             other mafia is. When they've had enough time to do this, tell 
-             them to close their eyes and have everyone open their eyes. 
-             That's the first night. */
+            this.promptMafia();
+            this.promptSheriff();
         }
 
         this.isDayTime = true;
@@ -104,4 +92,39 @@ public class ServerTurnController {
     public boolean isDayTime() {
         return this.isDayTime;
     }
+    
+     /**
+     * promptMafia()
+     * Prompt the mafia to vote on murdering someone
+     */
+    public void promptMafia() {
+        String prompt = "(NARRATOR) Mafia, it is your turn to nominate a person "
+                + "to be killed.\nTo vote for a person, type and enter"
+                + "`MURDER username`.\n";
+        for(Participant p : this.turnSequencer.getClients())
+        {
+            if(p.getRole().isMafia())
+            {
+                p.pushOutput(prompt);
+            }
+        }
+    }
+    
+    /**
+     * promptSheriff()
+     * Prompt the sheriff to accuse people of being members of the mafia
+     */
+    public void promptSheriff() {
+        String prompt = "(NARRATOR) Sheriff, it is your turn to accuse a person "
+                + "of being the mafia.\nTo accuse a person, type and enter"
+                + "`ACCUSE username`.\n";
+        for(Participant p : this.turnSequencer.getClients())
+        {
+            if(p.getRole().getName().equals("Sheriff"))
+            {
+                p.pushOutput(prompt);
+            }
+        }
+    }
+    
 }
