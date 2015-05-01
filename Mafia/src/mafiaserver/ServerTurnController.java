@@ -1,7 +1,5 @@
 package mafiaserver;
 
-import java.util.Vector;
-
 /**
  *
  * @author Ryan Snell <ryansnell@me.com>
@@ -25,6 +23,8 @@ public class ServerTurnController {
     public void daySequence() {
 
         System.out.println("(NARRATOR) The sun has risen.\n");
+        
+        this.promptTownspeople();
 
         this.isDayTime = false;
         this.dayCount++;
@@ -124,6 +124,20 @@ public class ServerTurnController {
             {
                 p.pushOutput(prompt);
             }
+        }
+    }
+    
+    /**
+     * promptTownspeople()
+     * Prompt the townspeople to vote for someone to be lynched
+     */
+    public void promptTownspeople() {
+        String prompt = "(NARRATOR) Townspeople, it is your turn to accuse someone "
+                + "of being part of the mafia.\nTo accuse a person, type and enter"
+                + "`VOTE username`.\n";
+        for(Participant p : this.turnSequencer.getClients())
+        {
+            p.pushOutput(prompt);
         }
     }
     
