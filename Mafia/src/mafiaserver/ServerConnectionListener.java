@@ -66,7 +66,7 @@ public class ServerConnectionListener extends Thread {
                         new ServerMessageBroadcaster(
                                 this.serverObject.clients.get(0), 
                                 this.serverObject.clients, 
-                                newUser.username + " has joined.");
+                                newUser.username + " entered town.");
                 broadcast.start();
             }
         }

@@ -24,6 +24,8 @@ public class ServerTurnSequencer extends Thread {
     @Override
     public synchronized void run() {
         
+        
+        
         double minutesPerTurn = 1;
         long msPerTurn = (long) (minutesPerTurn * 60000);
 

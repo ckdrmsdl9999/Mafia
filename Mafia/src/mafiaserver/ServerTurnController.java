@@ -1,5 +1,7 @@
 package mafiaserver;
 
+import java.util.Vector;
+
 /**
  *
  * @author Ryan Snell <ryansnell@me.com>
@@ -15,6 +17,11 @@ public class ServerTurnController {
 
     public ServerTurnController(ServerTurnSequencer sts) {
         this.turnSequencer = sts;
+        // inform everyone of their roles
+        for(Participant p : this.turnSequencer.getClients())
+        {
+            p.notifyOfRole();
+        }
     }
 
     /**
@@ -39,6 +46,22 @@ public class ServerTurnController {
 
         if (this.nightCount == 0) {
             // first night
+            
+            // get mafia list
+            String mafiaList = "The following players are part of the mafia:\n" 
+                    + this.turnSequencer.server.getMafiaList();
+            
+            // output mafia list to all mafia
+            for(Participant p : this.turnSequencer.getClients())
+            {
+                if(p.hasRole() && p.isAlive())
+                {
+                    if(p.getRole().isMafia())
+                    {
+                        p.pushOutput(mafiaList);
+                    }
+                }
+            }
             
         } else {
             // regular night
