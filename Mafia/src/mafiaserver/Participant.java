@@ -31,7 +31,7 @@ abstract class Participant {
     public Role getRole() {
         return this.role;
     }
-
+    
     /**
      * setRole() Sets the participant's role
      *
@@ -131,6 +131,18 @@ abstract class Participant {
         }
     }
 
+    /**
+     * disconnect() Disconnects the client
+     */
+    abstract public void disconnect();
+    
+    /**
+     * isConnected()
+     * Returns true if the client is still connected
+     * @return True if Yes, False if No
+     */
+    abstract public boolean isConnected();
+    
     /**
      * getInput() Gets data from the client
      *

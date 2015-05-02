@@ -23,6 +23,14 @@ public class ServerParticipant extends Participant{
     }
     
     /**
+     * disconnect() Disconnects a client
+     */
+    @Override
+    public void disconnect() {
+        // Nothing happens
+    }
+    
+    /**
      * getInput()
      * Gets a string input from the client
      * @return Client Input
@@ -31,6 +39,17 @@ public class ServerParticipant extends Participant{
     public String getInput() {
         System.out.print(":");
         return this.input.nextLine();
+    }
+    
+    /**
+     * isConnected()
+     * Returns true if the client is still connected
+     * @return True if Yes, False if No
+     */
+    @Override
+    public boolean isConnected() {
+        // Server is always connected...
+        return true;
     }
     
     /**
