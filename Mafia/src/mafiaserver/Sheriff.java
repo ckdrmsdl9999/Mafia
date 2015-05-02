@@ -8,7 +8,6 @@ package mafiaserver;
 public class Sheriff extends Role {
     
     public Sheriff() {
-        this.isMafia = false;
         this.name = "Sheriff";
     }
     

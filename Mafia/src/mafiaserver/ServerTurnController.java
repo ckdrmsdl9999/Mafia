@@ -22,8 +22,14 @@ public class ServerTurnController {
      */
     public void daySequence() {
 
-        this.promptDaytime();
+        // Reenable chat for all
+        for(Participant p : this.turnSequencer.getClients()) {
+            p.changeSeeChatStatus(true);
+            p.changeTalkStatus(true);
+            p.changeVoteStatus(true);
+        }
         
+        this.promptDaytime();
         this.promptTownspeople();
 
         this.isDayTime = false;
@@ -105,7 +111,15 @@ public class ServerTurnController {
         {
             if(p.getRole().isMafia())
             {
+                p.changeSeeChatStatus(true);
+                p.changeTalkStatus(true);
+                p.changeVoteStatus(true);
                 p.pushOutput(prompt);
+            }
+            else {
+                p.changeSeeChatStatus(false);
+                p.changeTalkStatus(false);
+                p.changeVoteStatus(false);
             }
         }
     }
@@ -122,7 +136,15 @@ public class ServerTurnController {
         {
             if(p.getRole().getName().equals("Sheriff"))
             {
+                p.changeSeeChatStatus(true);
+                p.changeTalkStatus(true);
+                p.changeVoteStatus(true);
                 p.pushOutput(prompt);
+            }
+            else {
+                p.changeSeeChatStatus(false);
+                p.changeTalkStatus(false);
+                p.changeVoteStatus(false);
             }
         }
     }
