@@ -24,9 +24,11 @@ public class ServerTurnController {
 
         // Reenable chat for all
         for(Participant p : this.turnSequencer.getClients()) {
-            p.changeSeeChatStatus(true);
-            p.changeTalkStatus(true);
-            p.changeVoteStatus(true);
+            synchronized(p) {
+                p.changeSeeChatStatus(true);
+                p.changeTalkStatus(true);
+                p.changeVoteStatus(true);
+            }
         }
         
         this.promptDaytime();
@@ -104,22 +106,24 @@ public class ServerTurnController {
      * Prompt the mafia to vote on murdering someone
      */
     public void promptMafia() {
-        String prompt = "(NARRATOR) Mafia, it is your turn to nominate a person "
+        String prompt = "Mafia, it is your turn to nominate a person "
                 + "to be killed.\nTo vote for a person, type and enter"
                 + " `MURDER username`.\n";
         for(Participant p : this.turnSequencer.getClients())
         {
-            if(p.getRole().isMafia())
-            {
-                p.changeSeeChatStatus(true);
-                p.changeTalkStatus(true);
-                p.changeVoteStatus(true);
-                p.pushOutput(prompt);
-            }
-            else {
-                p.changeSeeChatStatus(false);
-                p.changeTalkStatus(false);
-                p.changeVoteStatus(false);
+            synchronized(p) {
+                if(p.getRole().isMafia())
+                {
+                    p.changeSeeChatStatus(true);
+                    p.changeTalkStatus(true);
+                    p.changeVoteStatus(true);
+                    p.pushOutput(prompt);
+                }
+                else {
+                    p.changeSeeChatStatus(false);
+                    p.changeTalkStatus(false);
+                    p.changeVoteStatus(false);
+                }
             }
         }
     }
@@ -129,22 +133,24 @@ public class ServerTurnController {
      * Prompt the sheriff to accuse people of being members of the mafia
      */
     public void promptSheriff() {
-        String prompt = "(NARRATOR) Sheriff, it is your turn to accuse a person "
+        String prompt = "Sheriff, it is your turn to accuse a person "
                 + "of being the mafia.\nTo accuse a person, type and enter"
                 + " `ACCUSE username`.\n";
         for(Participant p : this.turnSequencer.getClients())
         {
-            if(p.getRole().getName().equals("Sheriff"))
-            {
-                p.changeSeeChatStatus(true);
-                p.changeTalkStatus(true);
-                p.changeVoteStatus(true);
-                p.pushOutput(prompt);
-            }
-            else {
-                p.changeSeeChatStatus(false);
-                p.changeTalkStatus(false);
-                p.changeVoteStatus(false);
+            synchronized(p) {
+                if(p.getRole().getName().equals("Sheriff"))
+                {
+                    p.changeSeeChatStatus(true);
+                    p.changeTalkStatus(true);
+                    p.changeVoteStatus(true);
+                    p.pushOutput(prompt);
+                }
+                else {
+                    p.changeSeeChatStatus(false);
+                    p.changeTalkStatus(false);
+                    p.changeVoteStatus(false);
+                }
             }
         }
     }
@@ -154,7 +160,7 @@ public class ServerTurnController {
      * Prompt the townspeople to vote for someone to be lynched
      */
     public void promptTownspeople() {
-        String prompt = "(NARRATOR) Townspeople, it is your turn to accuse someone "
+        String prompt = "Townspeople, it is your turn to accuse someone "
                 + "of being part of the mafia.\nTo accuse a person, type and enter"
                 + " `VOTE username`.\n";
         this.blastPrompt(prompt);
@@ -165,7 +171,7 @@ public class ServerTurnController {
      * Prompt the townspeople that it is night time
      */
     public void promptNighttime() {
-        String prompt = "(NARRATOR) Night has fallen upon us.\n";
+        String prompt = "Night has fallen upon us.\n";
         this.blastPrompt(prompt);
     }
     
@@ -174,19 +180,22 @@ public class ServerTurnController {
      * Prompt the townspeople that it is day time
      */
     public void promptDaytime() {
-        String prompt = "(NARRATOR) The sun has risen.\n";
+        String prompt = "The sun has risen.\n";
         this.blastPrompt(prompt);
     }
     
     /**
      * blastPrompt()
      * Send a prompt to all connected clients
+     * @param s Message to broadcast
      */
     public void blastPrompt(String s) {
-        for(Participant p : this.turnSequencer.getClients())
-        {
-            p.pushOutput(s);
-        }
+        ServerMessageBroadcaster broadcast = 
+                new ServerMessageBroadcaster(
+                        this.turnSequencer.server.clients.get(0), 
+                        this.turnSequencer.server.clients, 
+                        s);
+        broadcast.start();
     }
     
 }
