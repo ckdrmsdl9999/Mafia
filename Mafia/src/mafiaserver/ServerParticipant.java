@@ -10,7 +10,6 @@ import java.util.Scanner;
 public class ServerParticipant extends Participant{
     
     private final Scanner input; // Input scanner
-    private boolean isAlive = false;
     
     /**
      * ServerParticipant()
@@ -20,6 +19,7 @@ public class ServerParticipant extends Participant{
     public ServerParticipant(String username) {
         this.username = username;
         this.input = new Scanner(System.in);
+        this.isAlive = false;
     }
     
     /**

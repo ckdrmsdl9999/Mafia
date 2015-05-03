@@ -7,11 +7,11 @@ package mafiaserver;
  */
 abstract class Participant {
 
+    protected boolean isAlive = true;          // Tells if user is alive/active
     protected String username = "(UNKNOWN)";   // Username
     private boolean canTalk = true;            // Tells if user can chat
     private boolean canVote = false;           // Tells if user can vote
     private boolean canSeeChat = true;         // Tells if user can see chats
-    private boolean isAlive = true;            // Tells if user is alive/active
     private Role role = null;
 
     /**
