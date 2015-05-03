@@ -11,6 +11,7 @@ import java.util.logging.Logger;
  */
 public class MafiaServer extends Thread {
 
+    private final int MAX_CLIENTS = 6;           // Maximum accepted clients
     public Vector<Participant> clients;          // Client list
     public static final int PORT_NUMBER = 65004; // Port Number
     public ServerTurnSequencer turnSequencer;    // Turn sequencer
@@ -88,7 +89,7 @@ public class MafiaServer extends Thread {
                 = new ServerClientConnector(serverClient, this);
         clientConnector.start();
         
-        System.out.print("Waiting for six players ...");
+        System.out.print("Waiting for " + MAX_CLIENTS + " players ...");
         while(clients.size() < 6) {
             System.out.print(".");
             try {
@@ -98,7 +99,7 @@ public class MafiaServer extends Thread {
             }
         }
         
-        if(clients.size() == 6)
+        if(clients.size() == MAX_CLIENTS)
         {
             // randomly assign roles
             // TODO: Make Random
@@ -109,14 +110,14 @@ public class MafiaServer extends Thread {
             clients.get(4).setRole(new Mafia());
             clients.get(5).setRole(new Townsperson());
 
-            System.out.println("Six clients connected");
+            System.out.println(MAX_CLIENTS + " clients connected");
 
             // Create turn sequencer
             this.turnSequencer = new ServerTurnSequencer(this);
             this.turnSequencer.start();
         }
         else {
-            System.err.println("Only six players are allowed; please try again.");
+            System.err.println("Only " + MAX_CLIENTS + " players are allowed; please try again.");
         }
         
     }
