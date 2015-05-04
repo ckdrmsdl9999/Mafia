@@ -12,8 +12,6 @@ public class ServerTurnSequencer extends Thread {
     
     ServerTurnController turnController;
     MafiaServer server;
-    Map<String, Integer> mafiaVotes;
-    Map<String, Integer> publicVotes;
 
     /**
      * ServerTurnSequencer() Constructor for ServerTurnSequencer
@@ -35,7 +33,7 @@ public class ServerTurnSequencer extends Thread {
         
         double minutesPerTurn = 0.4;
         long msPerTurn = (long) (minutesPerTurn * 60000);
-        String publicVoteResult, sheriffVoteResult, mafiaVoteResult;
+        String publicVoteResult, mafiaVoteResult;
 
         while (!turnController.isGameOver()) {
             
