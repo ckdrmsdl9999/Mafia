@@ -88,64 +88,66 @@ public class MafiaServer extends Thread {
     public void run() {
         // Initialize log
         try {
-            this.log = new PrintWriter(new FileWriter("MafiaLog_" + System.currentTimeMillis()) + ".txt");
-            this.outputToLog("Initialized Mafia Log");
+            this.log = new PrintWriter("log/MafiaLog_" + System.currentTimeMillis() + ".txt", "UTF-8");
+            this.outputToLog("Initialized Mafia Log\n---------------------");
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
         }
         
-        
-        // Start remote connection threads
-        ServerConnectionListener listener = new ServerConnectionListener(this);
-        listener.start();
+        try {
+            // Start remote connection threads
+            ServerConnectionListener listener = new ServerConnectionListener(this);
+            listener.start();
 
-        // Add current server to the list of clients
-        ServerParticipant serverClient = new ServerParticipant("(NARRATOR)");
-        this.clients.add(serverClient);
+            // Add current server to the list of clients
+            ServerParticipant serverClient = new ServerParticipant("(NARRATOR)");
+            this.clients.add(serverClient);
 
-        // Create a client listener
-        ServerClientConnector clientConnector
-                = new ServerClientConnector(0, this);
-        clientConnector.start();
-        
-        System.out.print("Waiting for " + MAX_CLIENTS + " players ...");
-        
-        while(clients.size() < (MAX_CLIENTS + 1)) {
-            System.out.print(".");
-            try {
-                sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MafiaServer.class.getName()).log(Level.SEVERE, null, ex);
+            // Create a client listener
+            ServerClientConnector clientConnector
+                    = new ServerClientConnector(0, this);
+            clientConnector.start();
+
+            System.out.print("Waiting for " + MAX_CLIENTS + " players ...");
+
+            while(clients.size() < (MAX_CLIENTS + 1)) {
+                System.out.print(".");
+                try {
+                    sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(MafiaServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        }
-        
-        if(clients.size() == (MAX_CLIENTS + 1))
-        {
-            // randomly assign roles
-            // TODO: Make Random
-            clients.get(1).setRole(new Sheriff());
-            clients.get(2).setRole(new Townsperson());
-            clients.get(3).setRole(new Mafia());
-            clients.get(4).setRole(new Townsperson());
-            clients.get(5).setRole(new Mafia());
-            clients.get(6).setRole(new Townsperson());
 
-            System.out.println(MAX_CLIENTS + " clients connected");
+            if(clients.size() == (MAX_CLIENTS + 1))
+            {
+                // randomly assign roles
+                // TODO: Make Random
+                clients.get(1).setRole(new Sheriff());
+                clients.get(2).setRole(new Townsperson());
+                clients.get(3).setRole(new Mafia());
+                clients.get(4).setRole(new Townsperson());
+                clients.get(5).setRole(new Mafia());
+                clients.get(6).setRole(new Townsperson());
 
-            // Create turn sequencer
-            this.turnSequencer = new ServerTurnSequencer(this);
-            this.turnSequencer.start();
-        }
-        else {
-            System.err.println("Only " + MAX_CLIENTS + " players are allowed; please try again.");
+                System.out.println(MAX_CLIENTS + " clients connected");
+
+                // Create turn sequencer
+                this.turnSequencer = new ServerTurnSequencer(this);
+                this.turnSequencer.start();
+            }
+            else {
+                System.err.println("Only " + MAX_CLIENTS + " players are allowed; please try again.");
+            }
+        } finally {
+            this.log.close();
         }
         
     }
     
     public synchronized void outputToLog(String s) {
-        synchronized(this.log) {
-            this.log.println(s);
-        }
+        this.log.println(s);
+        this.log.flush();
     }
     
     /**
