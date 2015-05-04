@@ -55,6 +55,7 @@ public class ServerClientConnector extends Thread {
                     + "MURDER {player} = (Night - Mafia Only) Murder a player\n"
                     + "VOTE {player} = (Day) Vote a player for lynching";
             this.serverObject.clients.get(clientIndex).pushOutput(helpText);
+            this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " asked for the help text");
         }
         else if(input.startsWith("PLAYER")) { // Get player status
             // Get target player's username (7 is where player name starts)
@@ -85,9 +86,13 @@ public class ServerClientConnector extends Thread {
                 if(!hit) {
                     this.serverObject.clients.get(clientIndex).pushOutput("No match for that username.");
                 }
+                
+                this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " inquired about " + username + "'s status");
+                
             }
             else {
                 this.serverObject.clients.get(clientIndex).pushOutput("Please enter a valid vote after the PLAYER command.");
+                this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " entered an invalid player command");
             }
         }
         else if(input.startsWith("MURDER")) { // Murder a player
@@ -97,13 +102,16 @@ public class ServerClientConnector extends Thread {
                 // If player can vote
                 if(this.serverObject.clients.get(clientIndex).canVote() && this.serverObject.clients.get(clientIndex).getRole().isMafia()) {
                     this.serverObject.mafiaVotes.addVote(this.serverObject.clients.get(clientIndex), username);
+                    this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " voted to murder " + username);
                 }
                 else {
                     this.serverObject.clients.get(clientIndex).pushOutput("You cannot currently do that.");
+                    this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " unsuccessfully attempted to vote to murder " + username);
                 }
             }
             else {
                 this.serverObject.clients.get(clientIndex).pushOutput("Please enter a valid vote after the MURDER command.");
+                this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " entered an invalid murder command");
             }
         }
         else if(input.startsWith("ACCUSE")) { // Accuse a player of being part of the mafia
@@ -127,14 +135,17 @@ public class ServerClientConnector extends Thread {
                             this.serverObject.clients.get(clientIndex).pushOutput("(NARRATOR) " + accused.getUsername() + " is not involved with the mafia.");
                         }
                     }
+                    this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " accused " + username + " of being part of the mafia");
 
                 }
                 else {
                     this.serverObject.clients.get(clientIndex).pushOutput("You cannot currently do that.");
+                    this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " unsuccessfully tried to accuse " + username);
                 }
             }
             else {
                 this.serverObject.clients.get(clientIndex).pushOutput("Please enter a valid vote after the ACCUSE command.");
+                this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " entered an invalid accuse command");
             }
         }
         else if(input.startsWith("SHOW USERS")) { // Show current user list
@@ -142,9 +153,11 @@ public class ServerClientConnector extends Thread {
             this.serverObject.clients.get(clientIndex).pushOutput("CURRENTLY CONNECTED USERS:");
             this.serverObject.clients.get(clientIndex).pushOutput(separator);
             this.serverObject.clients.get(clientIndex).pushOutput(this.serverObject.getClientList());
+            this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " inquired about the current players");
         }
         else if(input.equals("STATUS")) { // Get game status
             // TODO
+            this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " inquired about the game status");
         }
         else if(input.startsWith("VOTE")) { // Vote a player for lynching
             // Get target player's username (5 is where player name starts)
@@ -155,13 +168,16 @@ public class ServerClientConnector extends Thread {
                 if(this.serverObject.clients.get(clientIndex).canVote()) {
                     // Run vote action
                     this.serverObject.publicVotes.addVote(this.serverObject.clients.get(clientIndex), username);
+                    this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " voted to lynch " + username);
                 }
                 else {
                     this.serverObject.clients.get(clientIndex).pushOutput("You cannot currently do that.");
+                    this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " unsuccessfully tried to lynch " + username);
                 }
             }
             else {
                 this.serverObject.clients.get(clientIndex).pushOutput("Please enter a valid vote after the VOTE command.");
+                this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " incorrectly voted");
             }
         }
         else { // Broadcast message if user is allowed to chat
@@ -173,6 +189,7 @@ public class ServerClientConnector extends Thread {
             }
             else {
                 this.serverObject.clients.get(clientIndex).pushOutput("You are not currently allowed to chat.");
+                this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " tried to chat");
             }
         }
     }

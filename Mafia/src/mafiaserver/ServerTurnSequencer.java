@@ -63,7 +63,9 @@ public class ServerTurnSequencer extends Thread {
                     synchronized(this.getClients()) {
                        for(Participant p : this.getClients()) {
                             synchronized(p) {
-                                p.pushOutput("(NARRATOR): " + playerToLynch.getUsername() + " has lynched by the public");
+                                String msg = "(NARRATOR): " + playerToLynch.getUsername() + " has lynched by the public";
+                                p.pushOutput(msg);
+                                this.server.outputToLog(msg);
                             }
                         }
                     }
@@ -78,7 +80,9 @@ public class ServerTurnSequencer extends Thread {
                     synchronized(this.getClients()) {
                        for(Participant p : this.getClients()) {
                             synchronized(p) {
-                                p.pushOutput("(NARRATOR): " + nextHit.getUsername() + " has been murdered by the mafia");
+                                String msg = "(NARRATOR): " + nextHit.getUsername() + " has been murdered by the mafia";
+                                p.pushOutput(msg);
+                                this.server.outputToLog(msg);
                             }
                         }
                     }
@@ -127,6 +131,7 @@ public class ServerTurnSequencer extends Thread {
             message = "Unfortunately, the Mafia have once again taken over the town.";
         
         this.turnController.blastPrompt("The game has ended: " + message);
+        this.server.outputToLog("The game has ended: " + message);
     }
 
 }

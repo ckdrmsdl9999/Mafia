@@ -3,6 +3,8 @@ package mafiaserver;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,7 +91,7 @@ public class MafiaServer extends Thread {
         // Initialize log
         try {
             this.log = new PrintWriter("log/MafiaLog_" + System.currentTimeMillis() + ".txt", "UTF-8");
-            this.outputToLog("Initialized Mafia Log\n---------------------");
+            this.outputToLog("Initialized Mafia Log");
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
         }
@@ -98,15 +100,18 @@ public class MafiaServer extends Thread {
             // Start remote connection threads
             ServerConnectionListener listener = new ServerConnectionListener(this);
             listener.start();
+            this.outputToLog("Started server connection listener thread");
 
             // Add current server to the list of clients
             ServerParticipant serverClient = new ServerParticipant("(NARRATOR)");
             this.clients.add(serverClient);
+            this.outputToLog("Added narrator to client list");
 
             // Create a client listener
             ServerClientConnector clientConnector
                     = new ServerClientConnector(0, this);
             clientConnector.start();
+            this.outputToLog("Started server client connector thread");
 
             System.out.print("Waiting for " + MAX_CLIENTS + " players ...");
 
@@ -121,6 +126,7 @@ public class MafiaServer extends Thread {
 
             if(clients.size() == (MAX_CLIENTS + 1))
             {
+                this.outputToLog("Required number of players reached");
                 // randomly assign roles
                 // TODO: Make Random
                 clients.get(1).setRole(new Sheriff());
@@ -129,12 +135,15 @@ public class MafiaServer extends Thread {
                 clients.get(4).setRole(new Townsperson());
                 clients.get(5).setRole(new Mafia());
                 clients.get(6).setRole(new Townsperson());
+                
+                this.outputToLog("Assigned player roles");
 
                 System.out.println(MAX_CLIENTS + " clients connected");
 
                 // Create turn sequencer
                 this.turnSequencer = new ServerTurnSequencer(this);
                 this.turnSequencer.start();
+                this.outputToLog("Started turn sequencer thread");
             }
             else {
                 System.err.println("Only " + MAX_CLIENTS + " players are allowed; please try again.");
@@ -146,7 +155,10 @@ public class MafiaServer extends Thread {
     }
     
     public synchronized void outputToLog(String s) {
-        this.log.println(s);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy hh:mm:ss");
+        
+        this.log.println("[" + sdf.format(date) + "] " + s);
         this.log.flush();
     }
     

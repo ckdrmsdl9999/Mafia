@@ -21,6 +21,8 @@ public class ServerTurnController {
      * daySequence() Run the day sequence
      */
     public void daySequence() {
+        
+        this.turnSequencer.server.outputToLog("The sun has risen");
 
         // Reenable chat for all
         for(Participant p : this.turnSequencer.getClients()) {
@@ -43,7 +45,7 @@ public class ServerTurnController {
      */
     public void nightSequence() {
         
-        /** In order to go to the next time of day, call turnSequencer.interrupt(); **/
+        this.turnSequencer.server.outputToLog("Night has fallen");
 
         this.promptNighttime();
 
