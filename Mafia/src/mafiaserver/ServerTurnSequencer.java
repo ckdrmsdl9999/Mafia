@@ -62,20 +62,33 @@ public class ServerTurnSequencer extends Thread {
             mafiaVoteResult = this.server.mafiaVotes.getResult();
             
             if(publicVoteResult != null) {
+                Participant playerToLynch = this.server.lookupParticipantByUsername(publicVoteResult);
+                if(playerToLynch != null) {
+                    playerToLynch.deactivate();
+                    this.turnController.blastPrompt(playerToLynch.getUsername() + " has been killed by request of the townspeople");
+                }
 
             }
             
             if(sheriffVoteResult != null) {
                 Participant accused = this.server.lookupParticipantByUsername(sheriffVoteResult);
                 if(accused != null) {
-                    // TODO: let all sheriffs know that accused either is or is not part of mafia
+                    if(accused.getRole().isMafia)
+                    {
+                        // mafia
+                        this.turnController.broadcastSheriffs(accused.getUsername() + " is indeed a mafioso. Stay alert.");
+                    } else {
+                        // not mafia
+                        this.turnController.broadcastSheriffs(accused.getUsername() + " is not involved with the mafia.");
+                    }
                 }
             }
             
             if(mafiaVoteResult != null) {
                 Participant nextHit = this.server.lookupParticipantByUsername(mafiaVoteResult);
                 if(nextHit != null) {
-                    // TODO: Murder nextHit and inform everyone
+                    nextHit.deactivate();
+                    this.turnController.blastPrompt(nextHit.getUsername() + " has been murdered by the mafia");
                 }
                 
             }

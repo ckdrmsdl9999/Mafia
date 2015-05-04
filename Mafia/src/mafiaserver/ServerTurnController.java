@@ -156,6 +156,23 @@ public class ServerTurnController {
     }
     
     /**
+     * broadcastSheriffs()
+     * Broadcast a message to all sheriffs
+     * @param s Message
+     */
+    public void broadcastSheriffs(String s) {
+        for(Participant p : this.turnSequencer.getClients())
+        {
+            synchronized(p) {
+                if(p.getRole().getName().equals("Sheriff"))
+                {
+                    p.pushOutput(s);
+                }
+            }
+        }
+    }
+    
+    /**
      * promptTownspeople()
      * Prompt the townspeople to vote for someone to be lynched
      */
