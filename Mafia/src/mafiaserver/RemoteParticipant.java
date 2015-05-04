@@ -82,10 +82,10 @@ public class RemoteParticipant extends Participant{
      */
     @Override
     public void pushOutput(String input) {
-        System.out.println("LOOK I'm TRYING");
         try {
             // Write to the client
             this.outputStream.writeUTF(input);
+            System.out.println("Attempted to send: " + input);
         }
         catch(IOException ex) {
             System.err.println(ex.getMessage());
