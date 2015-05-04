@@ -26,8 +26,8 @@ public class RemoteParticipant extends Participant{
         this.clientSocket = connection;
         this.username = username;
         try {
-            this.inputStream = new DataInputStream(connection.getInputStream());
-            this.outputStream = new DataOutputStream(connection.getOutputStream());
+            this.inputStream = new DataInputStream(this.clientSocket.getInputStream());
+            this.outputStream = new DataOutputStream(this.clientSocket.getOutputStream());
         }
         catch(IOException ex) {
             System.err.println(ex.getMessage());
