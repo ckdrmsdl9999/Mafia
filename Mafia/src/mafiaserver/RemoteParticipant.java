@@ -84,8 +84,10 @@ public class RemoteParticipant extends Participant{
     public void pushOutput(String input) {
         try {
             // Write to the client
+            this.outputStream = new DataOutputStream(
+                    this.clientSocket.getOutputStream());
             this.outputStream.writeUTF(input);
-            System.out.println("Attempted to send: " + input);
+            
         }
         catch(IOException ex) {
             System.err.println(ex.getMessage());
