@@ -45,5 +45,8 @@ public class ClientServerConnector extends Thread {
         catch(IOException ex) {
             System.err.println(ex.getMessage());
         }
+        catch(Exception ex) { 
+            System.err.println(ex.getMessage());
+        }
     }
 }
