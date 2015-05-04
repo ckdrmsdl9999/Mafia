@@ -25,7 +25,7 @@ public class VoteSequence extends Thread {
      * @param client Player Voting
      * @param vote Vote Value
      */
-    public void addVote(RemoteParticipant client, String vote) {
+    public void addVote(Participant client, String vote) {
         // Add or overwrite current vote for the client, if they can vote
         if(client.canVote()) {
             this.votes.put(client.getUsername(), vote);

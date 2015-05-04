@@ -36,6 +36,7 @@ public class ServerTurnSequencer extends Thread {
         
         double minutesPerTurn = 1;
         long msPerTurn = (long) (minutesPerTurn * 60000);
+        String publicVoteResult, sheriffVoteResult, mafiaVoteResult;
 
         while (!turnController.isGameOver()) {
             
@@ -55,8 +56,29 @@ public class ServerTurnSequencer extends Thread {
             } catch (InterruptedException ex) {
                 System.err.println(ex.getMessage());
             }
+
+            publicVoteResult = this.server.publicVotes.getResult();
+            sheriffVoteResult = this.server.sheriffVotes.getResult();
+            mafiaVoteResult = this.server.mafiaVotes.getResult();
             
-            // processing of votes should go here
+            if(publicVoteResult != null) {
+
+            }
+            
+            if(sheriffVoteResult != null) {
+                Participant accused = this.server.lookupParticipantByUsername(sheriffVoteResult);
+                if(accused != null) {
+                    // TODO: let all sheriffs know that accused either is or is not part of mafia
+                }
+            }
+            
+            if(mafiaVoteResult != null) {
+                Participant nextHit = this.server.lookupParticipantByUsername(mafiaVoteResult);
+                if(nextHit != null) {
+                    // TODO: Murder nextHit and inform everyone
+                }
+                
+            }
             
         }
         
