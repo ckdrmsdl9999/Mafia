@@ -95,7 +95,15 @@ public class ServerTurnSequencer extends Thread {
         // game over
         this.outputGameOverMessage();
         
+        // close log
         this.server.closeLog();
+        
+        // disconnect clients
+        for(Participant p : this.getClients()) {
+            synchronized(p) {
+                p.disconnect();
+            }
+        }
         
     }
     

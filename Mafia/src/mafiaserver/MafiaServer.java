@@ -128,7 +128,6 @@ public class MafiaServer extends Thread {
         {
             this.outputToLog("Required number of players reached");
             // randomly assign roles
-            // TODO: Make Random
             clients.get(1).setRole(new Sheriff());
             clients.get(2).setRole(new Townsperson());
             clients.get(3).setRole(new Mafia());
