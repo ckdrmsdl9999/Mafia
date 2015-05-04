@@ -66,11 +66,13 @@ public class ServerTurnController {
                 }
             }
             
+            this.disableFunctionality();
             this.promptMafia();
             this.promptSheriff();
             
         } else {
             // regular night
+            this.disableFunctionality();
             this.promptMafia();
             this.promptSheriff();
         }
@@ -138,11 +140,6 @@ public class ServerTurnController {
                     p.changeVoteStatus(true);
                     p.pushOutput(prompt);
                 }
-                else {
-                    p.changeSeeChatStatus(false);
-                    p.changeTalkStatus(false);
-                    p.changeVoteStatus(false);
-                }
             }
         }
     }
@@ -165,7 +162,18 @@ public class ServerTurnController {
                     p.changeVoteStatus(true);
                     p.pushOutput(prompt);
                 }
-                else {
+            }
+        }
+    }
+    
+    /**
+     * disableFunctionality()
+     * Disable chat visibility, talk and vote functionality on all participants
+     */
+    public void disableFunctionality() {
+        for(Participant p : this.turnSequencer.getClients()) {
+            synchronized(p) {
+                if(p.getRole() != null) {
                     p.changeSeeChatStatus(false);
                     p.changeTalkStatus(false);
                     p.changeVoteStatus(false);

@@ -63,7 +63,7 @@ public class ServerTurnSequencer extends Thread {
                     synchronized(this.getClients()) {
                        for(Participant p : this.getClients()) {
                             synchronized(p) {
-                                p.pushOutput("(NARRATOR) " + playerToLynch.getUsername() + " has been murdered by the mafia");
+                                p.pushOutput("(NARRATOR): " + playerToLynch.getUsername() + " has lynched by the public");
                             }
                         }
                     }
@@ -78,7 +78,7 @@ public class ServerTurnSequencer extends Thread {
                     synchronized(this.getClients()) {
                        for(Participant p : this.getClients()) {
                             synchronized(p) {
-                                p.pushOutput("(NARRATOR)" + nextHit.getUsername() + " has been murdered by the mafia");
+                                p.pushOutput("(NARRATOR): " + nextHit.getUsername() + " has been murdered by the mafia");
                             }
                         }
                     }

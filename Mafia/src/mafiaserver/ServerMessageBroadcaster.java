@@ -35,12 +35,11 @@ public class ServerMessageBroadcaster extends Thread {
     @Override
     public synchronized void run() {
         // Loop through all clients (that are not the current user)
-        this.clients.stream().filter((user) -> (!user.getUsername().equals(this.source.getUsername()) && user.canSeeChat())).forEach((user) -> {
-            user.pushOutput(this.message);
-            try {
-                Thread.sleep(5);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ServerMessageBroadcaster.class.getName()).log(Level.SEVERE, null, ex);
+        this.clients.stream().forEach((p) -> {
+            synchronized(p) {
+                if(!this.source.getUsername().equals(p.getUsername()) && p.canSeeChat()) {
+                    p.pushOutput(this.message);
+                }
             }
         });
     }
