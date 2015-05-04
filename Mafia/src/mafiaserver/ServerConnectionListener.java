@@ -59,7 +59,10 @@ public class ServerConnectionListener extends Thread {
                 this.serverObject.clients.add(newUser);
                 // Create a client listener
                 ServerClientConnector clientConnector = 
-                        new ServerClientConnector(newUser, this.serverObject);
+                        new ServerClientConnector(
+                                this.serverObject.clients.get(
+                                        this.serverObject.clients.size()-1), 
+                                this.serverObject);
                 clientConnector.start();
                 
                 // Broadcast user join
