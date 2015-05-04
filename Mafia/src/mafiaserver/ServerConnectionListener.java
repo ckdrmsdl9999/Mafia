@@ -60,8 +60,7 @@ public class ServerConnectionListener extends Thread {
                 // Create a client listener
                 ServerClientConnector clientConnector = 
                         new ServerClientConnector(
-                                this.serverObject.clients.get(
-                                        this.serverObject.clients.size()-1), 
+                                this.serverObject.clients.size()-1, 
                                 this.serverObject);
                 clientConnector.start();
                 

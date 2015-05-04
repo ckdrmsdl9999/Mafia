@@ -105,7 +105,7 @@ public class MafiaServer extends Thread {
 
         // Create a client listener
         ServerClientConnector clientConnector
-                = new ServerClientConnector(serverClient, this);
+                = new ServerClientConnector(0, this);
         clientConnector.start();
         
         System.out.print("Waiting for " + MAX_CLIENTS + " players ...");
