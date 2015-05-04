@@ -88,6 +88,9 @@ public class ServerTurnSequencer extends Thread {
             
         }
         
+        // game over
+        this.outputGameOverMessage();
+        
     }
     
     /**
@@ -97,6 +100,33 @@ public class ServerTurnSequencer extends Thread {
      */
     public Vector<Participant> getClients() {
         return server.getClients();
+    }
+    
+    /**
+     * outputGameOverMessage()
+     * Output the relevant game over message
+     */
+    public void outputGameOverMessage() {
+        int townspeople = 0;
+        int mafia = 0;
+        String message = "";
+        
+        for(Participant p : this.getClients()) {
+            synchronized(p) {
+                if(p.getRole() != null && p.isAlive()) {
+                    if(p.getRole().isMafia())
+                        mafia++;
+                    else
+                        townspeople++;
+                }
+            }
+        }
+        if(mafia == 0)
+            message = "The townspeople have successfully fought off the Mafia; congratulations!";
+        else
+            message = "Unfortunately, the Mafia have once again taken over the town.";
+        
+        this.turnController.blastPrompt("The game has ended: " + message);
     }
 
 }
