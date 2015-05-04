@@ -61,6 +61,7 @@ public class ServerConnectionListener extends Thread {
                 ServerClientConnector clientConnector = 
                         new ServerClientConnector(newUser, this.serverObject);
                 clientConnector.start();
+                newUser.pushOutput("HELLO");
                 // Broadcast user join
                 ServerMessageBroadcaster broadcast = 
                         new ServerMessageBroadcaster(
