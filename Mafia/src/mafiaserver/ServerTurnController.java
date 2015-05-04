@@ -89,6 +89,22 @@ public class ServerTurnController {
      * @return gameOver
      */
     public boolean isGameOver() {
+        int mafiaCount = 0;
+        int townspeopleCount = 0;
+        for(Participant p : this.turnSequencer.getClients()) {
+            if(p.getRole() != null && p.isAlive() && p.isConnected()) {
+                if(p.getRole().isMafia()) {
+                    mafiaCount++;
+                } else {
+                    townspeopleCount++;
+                }
+            }
+        }
+        if(mafiaCount == 0 || mafiaCount > townspeopleCount)
+            this.gameOver = true;
+        else
+            this.gameOver = false;
+                    
         return this.gameOver;
     }
 
