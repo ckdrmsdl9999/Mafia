@@ -66,6 +66,9 @@ public class ServerTurnController {
                 }
             }
             
+            this.promptMafia();
+            this.promptSheriff();
+            
         } else {
             // regular night
             this.promptMafia();
