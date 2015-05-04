@@ -1,5 +1,8 @@
 package mafiaserver;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +19,7 @@ public class MafiaServer extends Thread {
     public static final int PORT_NUMBER = 65004; // Port Number
     public ServerTurnSequencer turnSequencer;    // Turn sequencer
     public int port;
+    PrintWriter log;
 
     /**
      * MafiaServer() Constructor for the MafiaServer class
@@ -76,6 +80,14 @@ public class MafiaServer extends Thread {
      */
     @Override
     public void run() {
+        // Initialize log
+        try {
+            this.log = new PrintWriter(new FileWriter("MafiaLog_" + System.currentTimeMillis()));
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+        
+        
         // Start remote connection threads
         ServerConnectionListener listener = new ServerConnectionListener(this);
         listener.start();
@@ -90,6 +102,7 @@ public class MafiaServer extends Thread {
         clientConnector.start();
         
         System.out.print("Waiting for " + MAX_CLIENTS + " players ...");
+        
         while(clients.size() < 6) {
             System.out.print(".");
             try {
@@ -121,4 +134,11 @@ public class MafiaServer extends Thread {
         }
         
     }
+    
+    public synchronized void outputToLog(String s) {
+        synchronized(this.log) {
+            this.log.println(s);
+        }
+    }
+    
 }
