@@ -166,7 +166,7 @@ public class ServerTurnController {
             synchronized(p) {
                 if(p.getRole().getName().equals("Sheriff"))
                 {
-                    p.pushOutput(s);
+                    p.pushOutput("(NARRATOR) " + s);
                 }
             }
         }

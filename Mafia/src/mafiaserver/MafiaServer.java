@@ -110,7 +110,7 @@ public class MafiaServer extends Thread {
         
         System.out.print("Waiting for " + MAX_CLIENTS + " players ...");
         
-        while(clients.size() < 6) {
+        while(clients.size() < (MAX_CLIENTS + 1)) {
             System.out.print(".");
             try {
                 sleep(1000);
@@ -119,16 +119,16 @@ public class MafiaServer extends Thread {
             }
         }
         
-        if(clients.size() == MAX_CLIENTS)
+        if(clients.size() == (MAX_CLIENTS + 1))
         {
             // randomly assign roles
             // TODO: Make Random
-            clients.get(0).setRole(new Sheriff());
-            clients.get(1).setRole(new Townsperson());
-            clients.get(2).setRole(new Mafia());
-            clients.get(3).setRole(new Townsperson());
-            clients.get(4).setRole(new Mafia());
-            clients.get(5).setRole(new Townsperson());
+            clients.get(1).setRole(new Sheriff());
+            clients.get(2).setRole(new Townsperson());
+            clients.get(3).setRole(new Mafia());
+            clients.get(4).setRole(new Townsperson());
+            clients.get(5).setRole(new Mafia());
+            clients.get(6).setRole(new Townsperson());
 
             System.out.println(MAX_CLIENTS + " clients connected");
 
