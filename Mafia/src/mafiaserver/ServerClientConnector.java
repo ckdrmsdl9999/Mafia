@@ -1,5 +1,7 @@
 package mafiaserver;
 
+import java.io.IOException;
+
 /**
  * ServerClientConnector.java
  * Contains the server client connector class
@@ -13,7 +15,7 @@ public class ServerClientConnector extends Thread {
     /**
      * ServerClientConnector()
      * Constructor for the ServerClientConnector class
-     * @param client Participant object
+     * @param clientIndex Participant Index in global Vector
      * @param serverObject IMServer Object
      */
     public ServerClientConnector(int clientIndex, MafiaServer serverObject) {
@@ -27,10 +29,26 @@ public class ServerClientConnector extends Thread {
      */
     @Override
     public void run() {
-        while(true) {
-            // Wait for a message from the participant
-            this.parseInput(
-                    this.serverObject.clients.get(clientIndex).getInput());
+        try {
+            while(true) {
+                // Wait for a message from the participant
+                this.parseInput(
+                        this.serverObject.clients.get(clientIndex).getInput());
+            }
+        }
+        catch(IOException ex) {
+            // Output error and disconnect client
+            System.err.println(ex.getMessage());
+            this.serverObject.clients.get(clientIndex).disconnect();
+            ServerMessageBroadcaster broadcast = 
+                    new ServerMessageBroadcaster(
+                            this.serverObject.clients.get(clientIndex), 
+                            this.serverObject.clients, 
+                            this.serverObject.clients.get(clientIndex)
+                                    .getUsername() + " has disconnected.");
+            broadcast.start();
+            // Don't remove from global playerset, but kill them off
+            this.serverObject.clients.get(clientIndex).deactivate();
         }
     }
     

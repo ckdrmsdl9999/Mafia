@@ -1,5 +1,7 @@
 package mafiaserver;
 
+import java.io.IOException;
+
 /**
  * Participant.java Contains the Participant class
  *
@@ -147,8 +149,9 @@ abstract class Participant {
      * getInput() Gets data from the client
      *
      * @return Input from Client
+     * @throws IOException
      */
-    abstract public String getInput();
+    abstract public String getInput() throws IOException;
 
     /**
      * pushOutput() Pushes data to the client

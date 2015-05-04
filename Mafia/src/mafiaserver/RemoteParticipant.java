@@ -53,16 +53,11 @@ public class RemoteParticipant extends Participant{
      * getInput()
      * Gets a string input from the client
      * @return Client Input
+     * @throws IOException
      */
     @Override
-    public String getInput() {
-        try {
-            return this.inputStream.readUTF();
-        }
-        catch(IOException ex) {
-            System.err.println(ex.getMessage());
-            return null;
-        }
+    public String getInput() throws IOException {
+        return this.inputStream.readUTF();
     }
     
     /**
@@ -72,7 +67,9 @@ public class RemoteParticipant extends Participant{
      */
     @Override
     public boolean isConnected() {
-        return !this.clientSocket.isClosed();
+        return !this.clientSocket.isClosed() 
+                && !this.clientSocket.isInputShutdown() 
+                && !this.clientSocket.isOutputShutdown();
     }
     
     /**
@@ -82,18 +79,21 @@ public class RemoteParticipant extends Participant{
      */
     @Override
     public void pushOutput(String input) {
-        try {
-            // Write to the client
-            this.outputStream = new DataOutputStream(
-                    this.clientSocket.getOutputStream());
-            this.outputStream.writeUTF(input);
-            
-        }
-        catch(IOException ex) {
-            System.err.println(ex.getMessage());
-        }
-        catch(Exception ex) {
-            System.err.println(ex.getMessage());
+        // Only push output if the client is connected
+        if(this.isConnected()) {
+            try {
+                // Write to the client
+                this.outputStream = new DataOutputStream(
+                        this.clientSocket.getOutputStream());
+                this.outputStream.writeUTF(input);
+
+            }
+            catch(IOException ex) {
+                System.err.println(ex.getMessage());
+            }
+            catch(Exception ex) {
+                System.err.println(ex.getMessage());
+            }
         }
     }
 }
