@@ -33,7 +33,7 @@ public class ServerMessageBroadcaster extends Thread {
      * Main thread execution procedures
      */
     @Override
-    public synchronized void run() {
+    public void run() {
         // Loop through all clients (that are not the current user)
         this.clients.stream().forEach((p) -> {
             synchronized(p) {
