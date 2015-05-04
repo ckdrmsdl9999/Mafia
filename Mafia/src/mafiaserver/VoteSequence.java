@@ -50,13 +50,15 @@ public class VoteSequence extends Thread {
         // First, tally the votes
         for(String vote : this.votes.values()) {
             // Get vote count for this entry
-            int currentVotes = results.get(vote);
+            int currentVotes = 0;
             
             if(results.containsKey(vote)) {
+                currentVotes = results.get(vote);
                 results.put(vote, currentVotes+1);
             }
             else {
                 results.put(vote, 1);
+                currentVotes = 1;
             }
             
             if(currentVotes+1 > winnerVotes) {

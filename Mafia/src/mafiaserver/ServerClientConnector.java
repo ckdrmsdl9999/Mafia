@@ -42,16 +42,7 @@ public class ServerClientConnector extends Thread {
         // Separator string
         String separator = "---------------";
         // input Cases
-        if(input.startsWith("ACCUSE")) { // Reveal player role
-            // If player can vote
-            if(client.canVote()) {
-                // Run vote action
-            }
-            else {
-                client.pushOutput("You cannot currently do that.");
-            }
-        }
-        else if (input.equals("HELP")) { // Display help message
+        if(input.startsWith("HELP")) { // Display help message
             // Output help string
             String helpText = separator + "\nALL COMMANDS:\n" 
                     + separator + "\n"
@@ -66,55 +57,70 @@ public class ServerClientConnector extends Thread {
         }
         else if(input.startsWith("PLAYER")) { // Get player status
             // Get target player's username (7 is where player name starts)
-            String username = input.substring(7);
-            // Track if we found a match
-            boolean hit = false;
-            
-            // Go through player list to find status
-            for(Participant player : this.serverObject.clients) {
-                if(player.getUsername().equals(username)) {
-                    // Set hit to true
-                    hit = true;
-                    String status = separator + "\n" + username + "\n" + separator
-                            + "\nStatus: ";
-                    if(player.isAlive()) {
-                        status += "Alive";
+            if(input.length() >= 7) {
+                String username = input.substring(7);
+                // Track if we found a match
+                boolean hit = false;
+
+                // Go through player list to find status
+                for(Participant player : this.serverObject.clients) {
+                    if(player.getUsername().equals(username)) {
+                        // Set hit to true
+                        hit = true;
+                        String status = separator + "\n" + username + "\n" + separator
+                                + "\nStatus: ";
+                        if(player.isAlive()) {
+                            status += "Alive";
+                        }
+                        else {
+                            status += "Dead\nRole: \n";
+                        }
+
+                        client.pushOutput(status);
                     }
-                    else {
-                        status += "Dead\nRole: \n";
-                    }
-                
-                    client.pushOutput(status);
+                }
+
+                // If we didn't get a match, tell the user
+                if(!hit) {
+                    client.pushOutput("No match for that username.");
                 }
             }
-            
-            // If we didn't get a match, tell the user
-            if(!hit) {
-                client.pushOutput("No match for that username.");
+            else {
+                client.pushOutput("Please enter a valid vote after the PLAYER command.");
             }
         }
         else if(input.startsWith("MURDER")) { // Murder a player
             // Get target player's username (7 is where player name starts)
-            String username = input.substring(7);
-            // If player can vote
-            if(client.canVote() && client.getRole().isMafia) {
-                this.serverObject.mafiaVotes.addVote(client, username);
+            if(input.length() >= 7) {
+                String username = input.substring(7);
+                // If player can vote
+                if(client.canVote() && client.getRole().isMafia) {
+                    this.serverObject.mafiaVotes.addVote(client, username);
+                }
+                else {
+                    client.pushOutput("You cannot currently do that.");
+                }
             }
             else {
-                client.pushOutput("You cannot currently do that.");
+                client.pushOutput("Please enter a valid vote after the MURDER command.");
             }
         }
         else if(input.startsWith("ACCUSE")) { // Accuse a player of being part of the mafia
             // Get target player's username (7 is where player name starts)
-            String username = input.substring(7);
-            
-            // If player can vote
-            if(client.canVote() && client.getRole().getName().equals("Sheriff")) {
-                // Run vote action
-                this.serverObject.sheriffVotes.addVote(client, username);
+            if(input.length() >= 7) {
+                String username = input.substring(7);
+
+                // If player can vote
+                if(client.canVote() && client.getRole().getName().equals("Sheriff")) {
+                    // Run vote action
+                    this.serverObject.sheriffVotes.addVote(client, username);
+                }
+                else {
+                    client.pushOutput("You cannot currently do that.");
+                }
             }
             else {
-                client.pushOutput("You cannot currently do that.");
+                client.pushOutput("Please enter a valid vote after the ACCUSE command.");
             }
         }
         else if(input.startsWith("SHOW USERS")) { // Show current user list
@@ -128,15 +134,20 @@ public class ServerClientConnector extends Thread {
         }
         else if(input.startsWith("VOTE")) { // Vote a player for lynching
             // Get target player's username (5 is where player name starts)
-            String username = input.substring(5);
-            
-            // If player can vote
-            if(client.canVote()) {
-                // Run vote action
-                this.serverObject.publicVotes.addVote(client, username);
+            if(input.length() >= 5) {
+                String username = input.substring(5);
+
+                // If player can vote
+                if(client.canVote()) {
+                    // Run vote action
+                    this.serverObject.publicVotes.addVote(client, username);
+                }
+                else {
+                    client.pushOutput("You cannot currently do that.");
+                }
             }
             else {
-                client.pushOutput("You cannot currently do that.");
+                client.pushOutput("Please enter a valid vote after the VOTE command.");
             }
         }
         else { // Broadcast message if user is allowed to chat
