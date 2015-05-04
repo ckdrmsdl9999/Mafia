@@ -21,7 +21,7 @@ public class MafiaServer extends Thread {
     public static final int PORT_NUMBER = 65004; // Port Number
     public ServerTurnSequencer turnSequencer;    // Turn sequencer
     public int port;
-    PrintWriter log;
+    public PrintWriter log;
     VoteSequence sheriffVotes;
     VoteSequence mafiaVotes;
     VoteSequence publicVotes;
@@ -96,70 +96,81 @@ public class MafiaServer extends Thread {
             System.err.println(ex.getMessage());
         }
         
-        try {
-            // Start remote connection threads
-            ServerConnectionListener listener = new ServerConnectionListener(this);
-            listener.start();
-            this.outputToLog("Started server connection listener thread");
 
-            // Add current server to the list of clients
-            ServerParticipant serverClient = new ServerParticipant("(NARRATOR)");
-            this.clients.add(serverClient);
-            this.outputToLog("Added narrator to client list");
+        // Start remote connection threads
+        ServerConnectionListener listener = new ServerConnectionListener(this);
+        listener.start();
+        this.outputToLog("Started server connection listener thread");
 
-            // Create a client listener
-            ServerClientConnector clientConnector
-                    = new ServerClientConnector(0, this);
-            clientConnector.start();
-            this.outputToLog("Started server client connector thread");
+        // Add current server to the list of clients
+        ServerParticipant serverClient = new ServerParticipant("(NARRATOR)");
+        this.clients.add(serverClient);
+        this.outputToLog("Added narrator to client list");
 
-            System.out.print("Waiting for " + MAX_CLIENTS + " players ...");
+        // Create a client listener
+        ServerClientConnector clientConnector
+                = new ServerClientConnector(0, this);
+        clientConnector.start();
+        this.outputToLog("Started server client connector thread");
 
-            while(clients.size() < (MAX_CLIENTS + 1)) {
-                System.out.print(".");
-                try {
-                    sleep(1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(MafiaServer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        System.out.print("Waiting for " + MAX_CLIENTS + " players ...");
+
+        while(clients.size() < (MAX_CLIENTS + 1)) {
+            System.out.print(".");
+            try {
+                sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MafiaServer.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
 
-            if(clients.size() == (MAX_CLIENTS + 1))
-            {
-                this.outputToLog("Required number of players reached");
-                // randomly assign roles
-                // TODO: Make Random
-                clients.get(1).setRole(new Sheriff());
-                clients.get(2).setRole(new Townsperson());
-                clients.get(3).setRole(new Mafia());
-                clients.get(4).setRole(new Townsperson());
-                clients.get(5).setRole(new Mafia());
-                clients.get(6).setRole(new Townsperson());
-                
-                this.outputToLog("Assigned player roles");
+        if(clients.size() == (MAX_CLIENTS + 1))
+        {
+            this.outputToLog("Required number of players reached");
+            // randomly assign roles
+            // TODO: Make Random
+            clients.get(1).setRole(new Sheriff());
+            clients.get(2).setRole(new Townsperson());
+            clients.get(3).setRole(new Mafia());
+            clients.get(4).setRole(new Townsperson());
+            clients.get(5).setRole(new Mafia());
+            clients.get(6).setRole(new Townsperson());
 
-                System.out.println(MAX_CLIENTS + " clients connected");
+            this.outputToLog("Assigned player roles");
 
-                // Create turn sequencer
-                this.turnSequencer = new ServerTurnSequencer(this);
-                this.turnSequencer.start();
-                this.outputToLog("Started turn sequencer thread");
-            }
-            else {
-                System.err.println("Only " + MAX_CLIENTS + " players are allowed; please try again.");
-            }
-        } finally {
-            this.log.close();
+            System.out.println(MAX_CLIENTS + " clients connected");
+
+            // Create turn sequencer
+            this.turnSequencer = new ServerTurnSequencer(this);
+            this.turnSequencer.start();
+            this.outputToLog("Started turn sequencer thread");
+        }
+        else {
+            System.err.println("Only " + MAX_CLIENTS + " players are allowed; please try again.");
         }
         
     }
     
-    public synchronized void outputToLog(String s) {
+    /**
+     * outputToLog()
+     * Output a message to the game log
+     * @param s Message
+     */
+    public void outputToLog(String s) {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy hh:mm:ss");
-        
-        this.log.println("[" + sdf.format(date) + "] " + s);
-        this.log.flush();
+        synchronized(log) {
+            String msg = "[" + sdf.format(date) + "] " + s;
+            log.println(msg);
+        }
+    }
+    
+    /**
+     * closeLog()
+     * Close the log file
+     */
+    public void closeLog() {
+        this.log.close();
     }
     
     /**

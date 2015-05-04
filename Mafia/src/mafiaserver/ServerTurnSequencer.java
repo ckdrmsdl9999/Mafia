@@ -61,13 +61,13 @@ public class ServerTurnSequencer extends Thread {
                 if(playerToLynch != null) {
                     playerToLynch.deactivate();
                     synchronized(this.getClients()) {
-                       for(Participant p : this.getClients()) {
+                        String msg = "(NARRATOR): " + playerToLynch.getUsername() + " has lynched by the public";
+                        for(Participant p : this.getClients()) {
                             synchronized(p) {
-                                String msg = "(NARRATOR): " + playerToLynch.getUsername() + " has lynched by the public";
                                 p.pushOutput(msg);
-                                this.server.outputToLog(msg);
                             }
                         }
+                        this.server.outputToLog(msg);
                     }
                 }
 
@@ -78,13 +78,13 @@ public class ServerTurnSequencer extends Thread {
                 if(nextHit != null) {
                     nextHit.deactivate();
                     synchronized(this.getClients()) {
-                       for(Participant p : this.getClients()) {
+                       String msg = "(NARRATOR): " + nextHit.getUsername() + " has been murdered by the mafia";
+                        for(Participant p : this.getClients()) {
                             synchronized(p) {
-                                String msg = "(NARRATOR): " + nextHit.getUsername() + " has been murdered by the mafia";
                                 p.pushOutput(msg);
-                                this.server.outputToLog(msg);
                             }
                         }
+                        this.server.outputToLog(msg);
                     }
                 }
                 
@@ -94,6 +94,8 @@ public class ServerTurnSequencer extends Thread {
         
         // game over
         this.outputGameOverMessage();
+        
+        this.server.closeLog();
         
     }
     
