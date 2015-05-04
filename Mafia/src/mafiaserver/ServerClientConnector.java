@@ -120,6 +120,15 @@ public class ServerClientConnector extends Thread {
                 // If player can vote
                 if(this.serverObject.clients.get(clientIndex).canVote() && this.serverObject.clients.get(clientIndex).getRole().isMafia()) {
                     this.serverObject.mafiaVotes.addVote(this.serverObject.clients.get(clientIndex), username);
+                    ServerMessageBroadcaster broadcast = 
+                            new ServerMessageBroadcaster(
+                                    this.serverObject.clients.get(clientIndex),
+                                    this.serverObject.clients,
+                                    this.serverObject.clients
+                                            .get(clientIndex).getUsername() 
+                                            + " has voted " + username
+                            );
+                    broadcast.start();
                     this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " voted to murder " + username);
                 }
                 else {
@@ -141,6 +150,15 @@ public class ServerClientConnector extends Thread {
                 if(this.serverObject.clients.get(clientIndex).canVote() && this.serverObject.clients.get(clientIndex).getRole().getName().equals("Sheriff")) {
                     // Run vote action
                     this.serverObject.sheriffVotes.addVote(this.serverObject.clients.get(clientIndex), username);
+                    ServerMessageBroadcaster broadcast = 
+                            new ServerMessageBroadcaster(
+                                    this.serverObject.clients.get(clientIndex),
+                                    this.serverObject.clients,
+                                    this.serverObject.clients
+                                            .get(clientIndex).getUsername() 
+                                            + " has voted " + username
+                            );
+                    broadcast.start();
                     Participant accused = this.serverObject.lookupParticipantByUsername(username);
 
                     if(accused != null) {
@@ -186,6 +204,15 @@ public class ServerClientConnector extends Thread {
                 if(this.serverObject.clients.get(clientIndex).canVote()) {
                     // Run vote action
                     this.serverObject.publicVotes.addVote(this.serverObject.clients.get(clientIndex), username);
+                    ServerMessageBroadcaster broadcast = 
+                            new ServerMessageBroadcaster(
+                                    this.serverObject.clients.get(clientIndex),
+                                    this.serverObject.clients,
+                                    this.serverObject.clients
+                                            .get(clientIndex).getUsername() 
+                                            + " has voted " + username
+                            );
+                    broadcast.start();
                     this.serverObject.outputToLog(this.serverObject.clients.get(clientIndex).getUsername() + " voted to lynch " + username);
                 }
                 else {

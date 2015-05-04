@@ -29,6 +29,7 @@ public class VoteSequence extends Thread {
         // Add or overwrite current vote for the client, if they can vote
         if(client.canVote()) {
             this.votes.put(client.getUsername(), vote);
+            client.pushOutput("Voted submitted: " + vote);
         }
         else {
             client.pushOutput("You cannot vote on this.");
