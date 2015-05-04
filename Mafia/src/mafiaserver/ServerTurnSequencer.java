@@ -25,7 +25,7 @@ public class ServerTurnSequencer extends Thread {
     }
 
     @Override
-    public synchronized void run() {
+    public void run() {
         
         // inform everyone of their roles
         for(Participant p : this.getClients())
@@ -33,7 +33,7 @@ public class ServerTurnSequencer extends Thread {
             p.notifyOfRole();
         }
         
-        double minutesPerTurn = 1;
+        double minutesPerTurn = 0.4;
         long msPerTurn = (long) (minutesPerTurn * 60000);
         String publicVoteResult, sheriffVoteResult, mafiaVoteResult;
 
@@ -62,7 +62,13 @@ public class ServerTurnSequencer extends Thread {
                 Participant playerToLynch = this.server.lookupParticipantByUsername(publicVoteResult);
                 if(playerToLynch != null) {
                     playerToLynch.deactivate();
-                    this.turnController.blastPrompt(playerToLynch.getUsername() + " has been killed by request of the townspeople");
+                    synchronized(this.getClients()) {
+                       for(Participant p : this.getClients()) {
+                            synchronized(p) {
+                                p.pushOutput("(NARRATOR) " + playerToLynch.getUsername() + " has been murdered by the mafia");
+                            }
+                        }
+                    }
                 }
 
             }
@@ -71,7 +77,13 @@ public class ServerTurnSequencer extends Thread {
                 Participant nextHit = this.server.lookupParticipantByUsername(mafiaVoteResult);
                 if(nextHit != null) {
                     nextHit.deactivate();
-                    this.turnController.blastPrompt(nextHit.getUsername() + " has been murdered by the mafia");
+                    synchronized(this.getClients()) {
+                       for(Participant p : this.getClients()) {
+                            synchronized(p) {
+                                p.pushOutput("(NARRATOR)" + nextHit.getUsername() + " has been murdered by the mafia");
+                            }
+                        }
+                    }
                 }
                 
             }

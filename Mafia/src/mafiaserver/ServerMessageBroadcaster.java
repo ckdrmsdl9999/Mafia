@@ -1,6 +1,8 @@
 package mafiaserver;
 
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * ServerMessageBroadcaster.java
@@ -31,10 +33,15 @@ public class ServerMessageBroadcaster extends Thread {
      * Main thread execution procedures
      */
     @Override
-    public void run() {
+    public synchronized void run() {
         // Loop through all clients (that are not the current user)
         this.clients.stream().filter((user) -> (!user.getUsername().equals(this.source.getUsername()) && user.canSeeChat())).forEach((user) -> {
             user.pushOutput(this.message);
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ServerMessageBroadcaster.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 }
