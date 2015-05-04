@@ -95,7 +95,7 @@ public class ServerClientConnector extends Thread {
             if(input.length() >= 7) {
                 String username = input.substring(7);
                 // If player can vote
-                if(this.serverObject.clients.get(clientIndex).canVote() && this.serverObject.clients.get(clientIndex).getRole().isMafia) {
+                if(this.serverObject.clients.get(clientIndex).canVote() && this.serverObject.clients.get(clientIndex).getRole().isMafia()) {
                     this.serverObject.mafiaVotes.addVote(this.serverObject.clients.get(clientIndex), username);
                 }
                 else {
@@ -115,6 +115,19 @@ public class ServerClientConnector extends Thread {
                 if(this.serverObject.clients.get(clientIndex).canVote() && this.serverObject.clients.get(clientIndex).getRole().getName().equals("Sheriff")) {
                     // Run vote action
                     this.serverObject.sheriffVotes.addVote(this.serverObject.clients.get(clientIndex), username);
+                    Participant accused = this.serverObject.lookupParticipantByUsername(username);
+
+                    if(accused != null) {
+                        if(accused.getRole() != null && accused.getRole().isMafia())
+                        {
+                            // mafia
+                            this.serverObject.clients.get(clientIndex).pushOutput("(NARRATOR) " + accused.getUsername() + " is indeed a mafioso. Stay alert.");
+                        } else {
+                            // not mafia
+                            this.serverObject.clients.get(clientIndex).pushOutput("(NARRATOR) " + accused.getUsername() + " is not involved with the mafia.");
+                        }
+                    }
+
                 }
                 else {
                     this.serverObject.clients.get(clientIndex).pushOutput("You cannot currently do that.");

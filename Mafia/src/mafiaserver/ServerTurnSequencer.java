@@ -12,7 +12,6 @@ public class ServerTurnSequencer extends Thread {
     
     ServerTurnController turnController;
     MafiaServer server;
-    Map<String, Integer> sheriffVotes;
     Map<String, Integer> mafiaVotes;
     Map<String, Integer> publicVotes;
 
@@ -43,7 +42,6 @@ public class ServerTurnSequencer extends Thread {
             // empty votes
             this.server.publicVotes.clearVotes();
             this.server.mafiaVotes.clearVotes();
-            this.server.sheriffVotes.clearVotes();
             
             // schedule a new turn every 5 minutes
             if (this.turnController.isDayTime()) {
@@ -58,7 +56,6 @@ public class ServerTurnSequencer extends Thread {
             }
 
             publicVoteResult = this.server.publicVotes.getResult();
-            sheriffVoteResult = this.server.sheriffVotes.getResult();
             mafiaVoteResult = this.server.mafiaVotes.getResult();
             
             if(publicVoteResult != null) {
@@ -68,20 +65,6 @@ public class ServerTurnSequencer extends Thread {
                     this.turnController.blastPrompt(playerToLynch.getUsername() + " has been killed by request of the townspeople");
                 }
 
-            }
-            
-            if(sheriffVoteResult != null) {
-                Participant accused = this.server.lookupParticipantByUsername(sheriffVoteResult);
-                if(accused != null) {
-                    if(accused.getRole() != null && accused.getRole().isMafia())
-                    {
-                        // mafia
-                        this.turnController.broadcastSheriffs(accused.getUsername() + " is indeed a mafioso. Stay alert.");
-                    } else {
-                        // not mafia
-                        this.turnController.broadcastSheriffs(accused.getUsername() + " is not involved with the mafia.");
-                    }
-                }
             }
             
             if(mafiaVoteResult != null) {
