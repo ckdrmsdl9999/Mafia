@@ -17,12 +17,14 @@ public class MafiaClient {
      */
     public static void main(String[] args) {
         
-        if(args.length > 0) {
+        if(args.length == 2) {
             // Host name set
             HOST_NAME = args[0];
+            PORT_NUMBER = Integer.parseInt(args[1]);
         } else {
             // Host name not set, run on localhost
             HOST_NAME = "localhost";
+            PORT_NUMBER = 65004;
         }
         
         // Start client connection
