@@ -73,7 +73,7 @@ public class ServerTurnSequencer extends Thread {
             if(sheriffVoteResult != null) {
                 Participant accused = this.server.lookupParticipantByUsername(sheriffVoteResult);
                 if(accused != null) {
-                    if(accused.getRole().isMafia)
+                    if(accused.getRole() != null && accused.getRole().isMafia())
                     {
                         // mafia
                         this.turnController.broadcastSheriffs(accused.getUsername() + " is indeed a mafioso. Stay alert.");

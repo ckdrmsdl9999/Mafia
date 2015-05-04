@@ -59,7 +59,7 @@ public class ServerTurnController {
             {
                 if(p.hasRole() && p.isAlive())
                 {
-                    if(p.getRole().isMafia())
+                    if(p.getRole() != null && p.getRole().isMafia())
                     {
                         p.pushOutput(mafiaList);
                     }
@@ -112,7 +112,7 @@ public class ServerTurnController {
         for(Participant p : this.turnSequencer.getClients())
         {
             synchronized(p) {
-                if(p.getRole().isMafia())
+                if(p.getRole() != null && p.getRole().isMafia())
                 {
                     p.changeSeeChatStatus(true);
                     p.changeTalkStatus(true);
@@ -139,7 +139,7 @@ public class ServerTurnController {
         for(Participant p : this.turnSequencer.getClients())
         {
             synchronized(p) {
-                if(p.getRole().getName().equals("Sheriff"))
+                if(p.getRole() != null && p.getRole().getName().equals("Sheriff"))
                 {
                     p.changeSeeChatStatus(true);
                     p.changeTalkStatus(true);
@@ -164,7 +164,7 @@ public class ServerTurnController {
         for(Participant p : this.turnSequencer.getClients())
         {
             synchronized(p) {
-                if(p.getRole().getName().equals("Sheriff"))
+                if(p.getRole() != null && p.getRole().getName().equals("Sheriff"))
                 {
                     p.pushOutput("(NARRATOR) " + s);
                 }
