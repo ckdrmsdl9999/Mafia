@@ -8,3 +8,4 @@
 /Mafia/build/
 /Mafia/dist/
 /Mafia/log/*
+*.log.txt

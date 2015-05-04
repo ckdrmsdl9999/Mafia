@@ -90,7 +90,7 @@ public class MafiaServer extends Thread {
     public void run() {
         // Initialize log
         try {
-            this.log = new PrintWriter("log/MafiaLog_" + System.currentTimeMillis() + ".txt", "UTF-8");
+            this.log = new PrintWriter("MafiaLog_" + System.currentTimeMillis() + ".log.txt", "UTF-8");
             this.outputToLog("Initialized Mafia Log");
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
