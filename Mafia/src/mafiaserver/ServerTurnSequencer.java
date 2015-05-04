@@ -1,6 +1,5 @@
 package mafiaserver;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -24,9 +23,6 @@ public class ServerTurnSequencer extends Thread {
     public ServerTurnSequencer(MafiaServer ms) {
         this.turnController = new ServerTurnController(this);
         this.server = ms;
-        sheriffVotes = new HashMap<String, Integer>();
-        mafiaVotes = new HashMap<String, Integer>();
-        publicVotes = new HashMap<String, Integer>();
     }
 
     @Override
@@ -44,9 +40,9 @@ public class ServerTurnSequencer extends Thread {
         while (!turnController.isGameOver()) {
             
             // empty votes
-            sheriffVotes.clear();
-            mafiaVotes.clear();
-            publicVotes.clear();
+            this.server.publicVotes.clearVotes();
+            this.server.mafiaVotes.clearVotes();
+            this.server.sheriffVotes.clearVotes();
             
             // schedule a new turn every 5 minutes
             if (this.turnController.isDayTime()) {

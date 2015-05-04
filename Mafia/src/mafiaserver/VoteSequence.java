@@ -78,4 +78,12 @@ public class VoteSequence extends Thread {
         
         return winner;
     }
+    
+    /**
+     * clearVotes()
+     * Empty the mapping for re-use
+     */
+    public void clearVotes() {
+        this.votes.clear();
+    }
 }

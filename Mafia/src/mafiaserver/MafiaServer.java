@@ -20,6 +20,9 @@ public class MafiaServer extends Thread {
     public ServerTurnSequencer turnSequencer;    // Turn sequencer
     public int port;
     PrintWriter log;
+    VoteSequence sheriffVotes;
+    VoteSequence mafiaVotes;
+    VoteSequence publicVotes;
 
     /**
      * MafiaServer() Constructor for the MafiaServer class
@@ -29,6 +32,9 @@ public class MafiaServer extends Thread {
     public MafiaServer(int port) {
         this.clients = new Vector();
         this.port = port;
+        this.sheriffVotes = new VoteSequence();
+        this.mafiaVotes = new VoteSequence();
+        this.publicVotes = new VoteSequence();
     }
 
     /**
@@ -82,7 +88,8 @@ public class MafiaServer extends Thread {
     public void run() {
         // Initialize log
         try {
-            this.log = new PrintWriter(new FileWriter("MafiaLog_" + System.currentTimeMillis()));
+            this.log = new PrintWriter(new FileWriter("MafiaLog_" + System.currentTimeMillis()) + ".txt");
+            this.outputToLog("Initialized Mafia Log");
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
         }
@@ -139,6 +146,22 @@ public class MafiaServer extends Thread {
         synchronized(this.log) {
             this.log.println(s);
         }
+    }
+    
+    /**
+     * lookupParticipantByUsername()
+     * Look up a participant by their username
+     * @param u Username
+     * @return Participant if result found, null if no result found
+     */
+    public Participant lookupParticipantByUsername(String u) {
+        for(Participant p : this.clients)
+        {
+           if(p.getUsername().equalsIgnoreCase(u)) {
+               return p;
+           } 
+        }
+        return null;
     }
     
 }
